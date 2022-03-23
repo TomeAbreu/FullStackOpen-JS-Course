@@ -2,4 +2,4 @@
 
 React APP "Unicafe"
 
-Exercice 1: Committed
+Exercises 1.1 and 1.2 included
