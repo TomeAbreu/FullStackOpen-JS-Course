@@ -2,4 +2,4 @@
 
 React APP "Unicafe"
 
-Exercises 1.1 and 1.2 included
+Exercises 1.1 and 1.2 included: Regarding passing props between Componenents in React
