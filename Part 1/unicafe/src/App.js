@@ -1,66 +1,71 @@
-const Header = (props) => {
+import { useState } from "react";
+
+import React from "react";
+
+const Title = ({ appName }) => {
+  return <div>{appName}</div>;
+};
+
+const Button = ({ handleClick, text }) => {
+  return <button onClick={handleClick}>{text}</button>;
+};
+
+export const Feedback = ({ value }) => {
+  return <span>{value}</span>;
+};
+
+const Statistics = ({ title, feedBack }) => {
   return (
     <div>
-      <h1>{props.courseName}</h1>
+      <div>{title}</div>
+      <Feedback value={feedBack.good}></Feedback>
+      <Feedback value={feedBack.neutral}></Feedback>
+      <Feedback value={feedBack.bad}></Feedback>
     </div>
   );
 };
 
-const Part = (props) => {
-  return (
-    <p>
-      {props.part.name} {props.part.exercises}
-    </p>
-  );
-};
-
-const Content = (props) => {
-  return (
-    <div>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
-    </div>
-  );
-};
-
-const Total = (props) => {
-  console.log(props);
-  return (
-    <div>
-      <p>
-        Number of exercises{" "}
-        {props.parts[0].exercises +
-          props.parts[1].exercises +
-          props.parts[2].exercises}
-      </p>
-    </div>
-  );
-};
 const App = () => {
-  const course = {
-    name: "Half Stack application development",
-    parts: [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-      },
-    ],
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const feedBack = { good: good, neutral: neutral, bad: bad };
+
+  //Handle FeedBack Function
+  const increaseFeedBack = (stateName) => {
+    switch (stateName) {
+      case "good":
+        console.log("Lets increase good.");
+        setGood(good + 1);
+        break;
+      case "neutral":
+        console.log("Lets increase neutral.");
+        setNeutral(neutral + 1);
+        break;
+      case "bad":
+        console.log("Lets increase bad.");
+        setBad(bad + 1);
+        break;
+      default:
+    }
   };
 
+  //Titles
+  const appTitle = "give feedback";
+  const statisticTitle = "statistics";
+
   return (
     <div>
-      <Header courseName={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <Title appName={appTitle}></Title>
+      <Button handleClick={() => increaseFeedBack("good")} text="good"></Button>
+      <Button
+        handleClick={() => increaseFeedBack("neutral")}
+        text="neutral"
+      ></Button>
+      <Button handleClick={() => increaseFeedBack("bad")} text="bad"></Button>
+      <Statistics title={statisticTitle} feedBack={feedBack}></Statistics>
     </div>
   );
 };
