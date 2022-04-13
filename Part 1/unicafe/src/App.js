@@ -3,24 +3,35 @@ import { useState } from "react";
 import React from "react";
 
 const Title = ({ appName }) => {
-  return <div>{appName}</div>;
+  return (
+    <div>
+      <b>{appName}</b>
+    </div>
+  );
 };
 
 const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
-export const Feedback = ({ value }) => {
-  return <span>{value}</span>;
+export const Feedback = ({ text, value }) => {
+  return (
+    <div>
+      <span>{text}</span>
+      <span>{value}</span>
+    </div>
+  );
 };
 
 const Statistics = ({ title, feedBack }) => {
   return (
     <div>
-      <div>{title}</div>
-      <Feedback value={feedBack.good}></Feedback>
-      <Feedback value={feedBack.neutral}></Feedback>
-      <Feedback value={feedBack.bad}></Feedback>
+      <div>
+        <b>{title}</b>
+      </div>
+      <Feedback text="good: " value={feedBack.good}></Feedback>
+      <Feedback text="neutral: " value={feedBack.neutral}></Feedback>
+      <Feedback text="bad: " value={feedBack.bad}></Feedback>
     </div>
   );
 };
@@ -30,6 +41,7 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const feedBack = { good: good, neutral: neutral, bad: bad };
 
@@ -59,12 +71,15 @@ const App = () => {
   return (
     <div>
       <Title appName={appTitle}></Title>
+      <p></p>
       <Button handleClick={() => increaseFeedBack("good")} text="good"></Button>
       <Button
         handleClick={() => increaseFeedBack("neutral")}
         text="neutral"
       ></Button>
       <Button handleClick={() => increaseFeedBack("bad")} text="bad"></Button>
+      <p></p>
+      <p></p>
       <Statistics title={statisticTitle} feedBack={feedBack}></Statistics>
     </div>
   );
