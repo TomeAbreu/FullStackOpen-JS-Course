@@ -14,7 +14,7 @@ const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
-export const Feedback = ({ text, value }) => {
+const Feedback = ({ text, value }) => {
   return (
     <div>
       <span>{text}</span>
@@ -23,15 +23,33 @@ export const Feedback = ({ text, value }) => {
   );
 };
 
-const Statistics = ({ title, feedBack }) => {
+const Statistics = ({
+  title,
+  good,
+  neutral,
+  bad,
+  total,
+  average,
+  positive,
+}) => {
   return (
     <div>
       <div>
         <b>{title}</b>
       </div>
-      <Feedback text="good: " value={feedBack.good}></Feedback>
-      <Feedback text="neutral: " value={feedBack.neutral}></Feedback>
-      <Feedback text="bad: " value={feedBack.bad}></Feedback>
+
+      {!total ? (
+        <div>No feedBack given...</div>
+      ) : (
+        <div>
+          <Feedback text="Good: " value={good}></Feedback>
+          <Feedback text="Neutral: " value={neutral} />
+          <Feedback text="Bad: " value={bad} />
+          <Feedback text="All: " value={total} />
+          <Feedback text="Average: " value={average} />
+          <Feedback text="Positive: " value={positive} />
+        </div>
+      )}
     </div>
   );
 };
@@ -41,46 +59,64 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
-  const [total, setTotal] = useState(0);
 
-  const feedBack = { good: good, neutral: neutral, bad: bad };
+  //Extra Statistics
+  const total = good + neutral + bad;
+  const average = total ? (good - bad) / total : 0;
+  const positive = (total ? (good * 100) / total : 0) + " %";
 
-  //Handle FeedBack Function
-  const increaseFeedBack = (stateName) => {
+  //App Titles
+  const appTitle = "give feedback";
+  const statisticTitle = "statistics";
+
+  //Handle Feedback Statistics
+  const increaseFeedBack = (stateName, good, neutral, bad) => {
+    //Increse feedback reaction
     switch (stateName) {
       case "good":
-        console.log("Lets increase good.");
         setGood(good + 1);
         break;
       case "neutral":
-        console.log("Lets increase neutral.");
         setNeutral(neutral + 1);
         break;
       case "bad":
-        console.log("Lets increase bad.");
         setBad(bad + 1);
         break;
       default:
     }
   };
 
-  //Titles
-  const appTitle = "give feedback";
-  const statisticTitle = "statistics";
-
   return (
     <div>
       <Title appName={appTitle}></Title>
       <p></p>
-      <Button handleClick={() => increaseFeedBack("good")} text="good"></Button>
       <Button
-        handleClick={() => increaseFeedBack("neutral")}
-        text="neutral"
+        handleClick={() => increaseFeedBack("good", good, neutral, bad)}
+        text="good"
+        feedBack={good}
       ></Button>
-      <Button handleClick={() => increaseFeedBack("bad")} text="bad"></Button>
+      <Button
+        handleClick={() => increaseFeedBack("neutral", good, neutral, bad)}
+        text="neutral"
+        feedBack={neutral}
+      ></Button>
+      <Button
+        handleClick={() => increaseFeedBack("bad", good, neutral, bad)}
+        text="bad"
+        feedBack={bad}
+      ></Button>
       <p></p>
       <p></p>
-      <Statistics title={statisticTitle} feedBack={feedBack}></Statistics>
+
+      <Statistics
+        title={statisticTitle}
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={total}
+        average={average}
+        positive={positive}
+      ></Statistics>
     </div>
   );
 };
