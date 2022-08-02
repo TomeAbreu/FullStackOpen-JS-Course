@@ -1,6 +1,20 @@
 import React from "react";
-import Header from "./Header";
-import Content from "./Content";
+
+const Header = ({ text }) => {
+  return <h1>{text}</h1>;
+};
+
+const Content = ({ parts }) => {
+  return (
+    <div>
+      {parts.map((part) => (
+        <p key={part.id}>
+          {part.name} {part.exercises}
+        </p>
+      ))}
+    </div>
+  );
+};
 
 const Course = ({ course }) => {
   //REDUCE FUNCTION: High order function that has a callback function that calculates sum of exercices in parts array
