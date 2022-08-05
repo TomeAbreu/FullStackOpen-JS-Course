@@ -13,9 +13,23 @@ const App = () => {
     event.preventDefault();
     const personObject = { name: newName };
 
-    //Update State variables
-    setPersons(persons.concat(personObject));
-    setNewName("");
+    //Check if person name already exists before update state variable persons
+    if (checkDuplicatePersonName() === false) {
+      //Update State variables
+      setPersons(persons.concat(personObject));
+      setNewName("");
+    }
+  };
+
+  const checkDuplicatePersonName = () => {
+    const duplicatePerson = persons.find((person) => person.name === newName);
+
+    if (duplicatePerson) {
+      alert(`${newName} is already added to phonebook`);
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (
