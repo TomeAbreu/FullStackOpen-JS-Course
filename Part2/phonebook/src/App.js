@@ -14,7 +14,6 @@ const App = () => {
   //Use Effect Hook: Will run after component APP is rendered and it will only run when persons is empty array
   const getPersonsData = () => {
     axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("GET PERSONS DATA: ", response.data);
       setPersons(response.data);
     });
   };
