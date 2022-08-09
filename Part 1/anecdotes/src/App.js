@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
@@ -14,11 +15,20 @@ const App = () => {
     "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
     "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.",
   ];
-
+  const [notes, setNotes] = useState([]);
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
   const [max, setMax] = useState(0);
   const [maxSelect, setMaxSelect] = useState(0);
+
+  useEffect(() => {
+    console.log("effect");
+    axios.get("http://localhost:3001/notes").then((response) => {
+      console.log("promise fulfilled");
+      setNotes(response.data);
+    });
+  }, []);
+  console.log("render", notes.length, "notes");
 
   //Reload Quote
   const reloadQuote = (anecdotes) => {
