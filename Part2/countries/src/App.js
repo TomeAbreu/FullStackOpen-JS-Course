@@ -20,6 +20,11 @@ function App() {
   const handleCountriesFilterNameOnChange = (event) => {
     setCountriesNameFilter(event.target.value);
   };
+
+  const handleShowCountryDetailsOnClick = (event) => {
+    setCountriesNameFilter(event.target.value);
+  };
+
   return (
     <div className="App">
       <div>
@@ -32,6 +37,7 @@ function App() {
         <Countries
           countries={countries}
           filterName={countriesNameFilter}
+          showCountryDetailsEvent={handleShowCountryDetailsOnClick}
         ></Countries>
       </div>
     </div>

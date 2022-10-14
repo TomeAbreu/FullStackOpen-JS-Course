@@ -1,6 +1,6 @@
 import React from "react";
 
-const Filter = ({ filterName, onChangeEvent }) => {
+const Filter = ({ onChangeEvent }) => {
   return (
     <div>
       Find countries: <input onChange={onChangeEvent} />

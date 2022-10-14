@@ -5,6 +5,9 @@ const CountryDetails = ({ country }) => {
   return (
     <div>
       <div>
+        <p>
+          <b>{country.name.common}</b>
+        </p>
         <p>Capital: {country.capital}</p>
         <p>Area: {country.area}</p>
       </div>
