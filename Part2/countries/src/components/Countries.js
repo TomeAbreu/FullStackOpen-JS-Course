@@ -11,13 +11,11 @@ const Countries = ({ countries, filterName, showCountryDetailsEvent }) => {
       <div>
         <ul>
           {filteredCountryList.map((country) => (
-            <div>
-              <Country
-                key={country.name.common}
-                name={country.name.common}
-                showCountryDetailsEvent={showCountryDetailsEvent}
-              ></Country>
-            </div>
+            <Country
+              key={country.name.common}
+              name={country.name.common}
+              showCountryDetailsEvent={showCountryDetailsEvent}
+            ></Country>
           ))}
         </ul>
       </div>

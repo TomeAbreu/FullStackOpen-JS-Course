@@ -1,7 +1,10 @@
 import React from "react";
+import WeatherDetails from "./WeatherDetails";
 
 const CountryDetails = ({ country }) => {
   const languages = Object.values(country.languages);
+  const coordinates = country.latlng;
+
   return (
     <div>
       <div>
@@ -20,6 +23,7 @@ const CountryDetails = ({ country }) => {
         </ul>
       </div>
       <div>{country.flag}</div>
+      <WeatherDetails coordinates={coordinates} capital={country.capital} />
     </div>
   );
 };
