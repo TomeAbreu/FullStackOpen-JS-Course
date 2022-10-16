@@ -13,6 +13,7 @@ const App = () => {
   const [filteredPersons, setFilteredPersons] = useState([]);
   const [filterName, setFilterName] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   //Use Effect Hook: Will run after component APP is rendered and it will only run when persons is empty array
   const getPersonsData = () => {
@@ -88,6 +89,14 @@ const App = () => {
             setTimeout(() => {
               setNotificationMessage(null);
             }, 3000);
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Information of ${newPerson.name} has already been removed from the server`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000);
           });
       }
     }
@@ -103,7 +112,10 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <h3>Add a new Person:</h3>
-      <Notification message={notificationMessage}></Notification>
+      <Notification
+        message={notificationMessage}
+        error={errorMessage}
+      ></Notification>
       <div>
         <Filter onChangeEvent={handleNewNameFilterChange}></Filter>
       </div>
