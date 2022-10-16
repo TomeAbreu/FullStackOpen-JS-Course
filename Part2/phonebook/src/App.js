@@ -71,6 +71,10 @@ const App = () => {
     }
   };
 
+  const personDeleteEvent = (persons) => {
+    setPersons(persons);
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -93,6 +97,8 @@ const App = () => {
         filter={filterName}
         persons={persons}
         filteredPersons={filteredPersons}
+        service={personsService}
+        handleDeletePerson={setPersons}
       ></Persons>
     </div>
   );
