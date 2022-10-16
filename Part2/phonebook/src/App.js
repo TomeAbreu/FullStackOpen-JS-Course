@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from "axios";
+import personsService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,8 +13,8 @@ const App = () => {
 
   //Use Effect Hook: Will run after component APP is rendered and it will only run when persons is empty array
   const getPersonsData = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personsService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   };
 
@@ -52,13 +52,11 @@ const App = () => {
 
     //Check if person name already exists before update state variable persons
     if (checkDuplicatePersonName() === false) {
-      axios
-        .post("http://localhost:3001/persons", newPerson)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName("");
-          setNewNumber("");
-        });
+      personsService.create(newPerson).then((newAddedPerson) => {
+        setPersons(persons.concat(newAddedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
