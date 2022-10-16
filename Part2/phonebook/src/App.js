@@ -50,28 +50,40 @@ const App = () => {
       number: newNumber,
     };
 
+    const duplicatePerson = checkDuplicatePersonName();
+
     //Check if person name already exists before update state variable persons
-    if (checkDuplicatePersonName() === false) {
+    if (!duplicatePerson) {
       personsService.create(newPerson).then((newAddedPerson) => {
         setPersons(persons.concat(newAddedPerson));
         setNewName("");
         setNewNumber("");
       });
     } else {
-      alert(
-        `${newPerson.name} is already added to the phonebook, replace the old number with a new one?`
-      );
+      if (
+        window.confirm(
+          `${duplicatePerson.name} is already added to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personsService
+          .update(duplicatePerson.id, newPerson)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== duplicatePerson.id ? person : updatedPerson
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
     }
   };
 
   const checkDuplicatePersonName = () => {
     const duplicatePerson = persons.find((person) => person.name === newName);
 
-    if (duplicatePerson) {
-      return true;
-    } else {
-      return false;
-    }
+    return duplicatePerson;
   };
 
   return (
