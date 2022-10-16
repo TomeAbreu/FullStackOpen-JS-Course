@@ -3,6 +3,8 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personsService from "./services/persons";
+import Notification from "./components/Notification";
+import "./index";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filteredPersons, setFilteredPersons] = useState([]);
   const [filterName, setFilterName] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   //Use Effect Hook: Will run after component APP is rendered and it will only run when persons is empty array
   const getPersonsData = () => {
@@ -58,6 +61,11 @@ const App = () => {
         setPersons(persons.concat(newAddedPerson));
         setNewName("");
         setNewNumber("");
+        //TODO: Add notification
+        setNotificationMessage(`Added ${newPerson.name}`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 3000);
       });
     } else {
       if (
@@ -75,6 +83,11 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            //TODO: Add notification
+            setNotificationMessage(`Updated ${newPerson.name}`);
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 3000);
           });
       }
     }
@@ -90,6 +103,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <h3>Add a new Person:</h3>
+      <Notification message={notificationMessage}></Notification>
       <div>
         <Filter onChangeEvent={handleNewNameFilterChange}></Filter>
       </div>
