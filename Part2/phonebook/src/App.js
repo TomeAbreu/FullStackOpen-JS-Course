@@ -17,6 +17,7 @@ const App = () => {
       setPersons(response.data);
     });
   };
+
   useEffect(getPersonsData, []);
 
   const handleNewNameChange = (event) => {
@@ -44,19 +45,21 @@ const App = () => {
 
   const addNewPerson = (event) => {
     event.preventDefault();
-    const personObject = {
+    const newPerson = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
     };
 
     //Check if person name already exists before update state variable persons
     if (checkDuplicatePersonName() === false) {
-      //Update State variables
-      setPersons(persons.concat(personObject));
+      axios
+        .post("http://localhost:3001/persons", newPerson)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+        });
     }
-    setNewName("");
-    setNewNumber("");
   };
 
   const checkDuplicatePersonName = () => {
