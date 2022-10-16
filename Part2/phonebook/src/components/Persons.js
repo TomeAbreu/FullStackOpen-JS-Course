@@ -3,12 +3,16 @@ import Person from "./Person";
 
 const Persons = (props) => {
   const deletePersonEvent = (personId) => {
-    console.log(personId);
-    props.service.deletePerson(personId).then((response) => {
-      props.handleDeletePerson(
-        props.persons.filter((person) => person.id !== personId)
-      );
-    });
+    const personToDelete = props.persons.find(
+      (person) => person.id === personId
+    );
+    if (window.confirm(`Delete ${personToDelete.name} ?`)) {
+      props.service.deletePerson(personId).then((response) => {
+        props.handleDeletePerson(
+          props.persons.filter((person) => person.id !== personId)
+        );
+      });
+    }
   };
   return (
     <div>

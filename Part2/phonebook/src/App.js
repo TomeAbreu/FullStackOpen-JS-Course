@@ -57,6 +57,10 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       });
+    } else {
+      alert(
+        `${newPerson.name} is already added to the phonebook, replace the old number with a new one?`
+      );
     }
   };
 
@@ -64,15 +68,10 @@ const App = () => {
     const duplicatePerson = persons.find((person) => person.name === newName);
 
     if (duplicatePerson) {
-      alert(`${newName} is already added to phonebook`);
       return true;
     } else {
       return false;
     }
-  };
-
-  const personDeleteEvent = (persons) => {
-    setPersons(persons);
   };
 
   return (
