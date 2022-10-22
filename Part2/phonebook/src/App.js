@@ -99,9 +99,7 @@ const App = () => {
             }, 3000);
           })
           .catch((error) => {
-            setErrorMessage(
-              `Information of ${newPerson.name} has already been removed from the server`
-            );
+            setErrorMessage(error.response.data.error);
             setTimeout(() => {
               setErrorMessage(null);
             }, 3000);
