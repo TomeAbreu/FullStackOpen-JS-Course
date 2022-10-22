@@ -58,16 +58,24 @@ const App = () => {
 
     //Check if person name already exists before update state variable persons
     if (!duplicatePerson) {
-      personsService.create(newPerson).then((newAddedPerson) => {
-        setPersons(persons.concat(newAddedPerson));
-        setNewName("");
-        setNewNumber("");
-        //TODO: Add notification
-        setNotificationMessage(`Added ${newPerson.name}`);
-        setTimeout(() => {
-          setNotificationMessage(null);
-        }, 3000);
-      });
+      personsService
+        .create(newPerson)
+        .then((newAddedPerson) => {
+          setPersons(persons.concat(newAddedPerson));
+          setNewName("");
+          setNewNumber("");
+          ///Add notification
+          setNotificationMessage(`Added ${newPerson.name}`);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.error);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+        });
     } else {
       if (
         window.confirm(
