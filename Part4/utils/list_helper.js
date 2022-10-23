@@ -35,9 +35,33 @@ const mostBlogs = (array) => {
   return authorName;
 };
 
+const mostLikes = (array) => {
+  let authorName = "";
+  let authorTotalLikes = 0;
+  if (array.length > 0) {
+    array.forEach((blog) => {
+      let author = blog.author;
+      let authorLikes = 0;
+      const authorArrayFiltered = array.filter((arrElement) => {
+        return arrElement.author === author;
+      });
+      authorLikes = sumLikes(authorArrayFiltered);
+
+      if (authorLikes >= authorTotalLikes) {
+        authorName = author;
+        authorTotalLikes = authorLikes;
+      }
+      console.log("Author Name: " + authorName, "Likes: " + authorTotalLikes);
+    });
+  }
+
+  return { author: authorName, likes: authorTotalLikes };
+};
+
 module.exports = {
   dummy,
   sumLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
