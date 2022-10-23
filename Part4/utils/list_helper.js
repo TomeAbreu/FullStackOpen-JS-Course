@@ -8,7 +8,16 @@ const sumLikes = (array) => {
   }, 0);
 };
 
+const favoriteBlog = (array) => {
+  const sortedArray = array.sort((a, b) => {
+    return a.likes - b.likes;
+  });
+
+  return sortedArray[0].likes;
+};
+
 module.exports = {
   dummy,
   sumLikes,
+  favoriteBlog,
 };

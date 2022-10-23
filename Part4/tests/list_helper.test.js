@@ -72,3 +72,47 @@ describe("total likes in blog list", () => {
     expect(result).toBe(137);
   });
 });
+describe("blog with most likes", () => {
+  test("when list has just one blog, favorite blog is the number of likes in blog", () => {
+    const blogs = [
+      {
+        title: "Dan Flying Solo",
+        author: "Dan",
+        url: "https://www.danflyingsolo.com",
+        likes: 10,
+        id: "6355440a0cbcfcb4109bf8ef",
+      },
+    ];
+
+    const result = listHelperFunctions.favoriteBlog(blogs);
+    expect(result).toEqual(blogs[0].likes);
+  });
+  test("when list has more than one blog, favorite blog is the one that has more likes", () => {
+    const blogs = [
+      {
+        title: "Dan Flying Solo",
+        author: "Dan",
+        url: "https://www.danflyingsolo.com",
+        likes: 10,
+        id: "6355440a0cbcfcb4109bf8ef",
+      },
+      {
+        title: "I am a food blog",
+        author: "Anna",
+        url: "https://iamafoodblog.com/",
+        likes: 23,
+        id: "635544760cbcfcb4109bf8f2",
+      },
+      {
+        title: "Pitchfork Blog",
+        author: "Carlos",
+        url: "https://pitchfork.com/",
+        likes: 32,
+        id: "635544a70cbcfcb4109bf8f4",
+      },
+    ];
+
+    const result = listHelperFunctions.favoriteBlog(blogs);
+    expect(result).toEqual(blogs[0].likes);
+  });
+});
