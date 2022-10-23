@@ -1,0 +1,27 @@
+{
+  "name": "part4",
+  "version": "1.0.0",
+  "description": "Blog List application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomeAbreu/FullStackOpen-JS-Course.git"
+  },
+  "author": "TomeAbreu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TomeAbreu/FullStackOpen-JS-Course/issues"
+  },
+  "homepage": "https://github.com/TomeAbreu/FullStackOpen-JS-Course#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^6.6.7",
+    "nodemon": "^2.0.20"
+  }
+}
