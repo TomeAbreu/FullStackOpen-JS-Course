@@ -116,3 +116,54 @@ describe("blog with most likes", () => {
     expect(result).toEqual(blogs[0].likes);
   });
 });
+
+describe("author with most blogs", () => {
+  test("when list is empty, most author is a empty string", () => {
+    const blogs = [];
+
+    const result = listHelperFunctions.mostBlogs(blogs);
+    expect(result).toEqual("");
+  });
+  test("when list has just one blog, most author is the auhtor of the blog", () => {
+    const blogs = [
+      {
+        title: "Dan Flying Solo",
+        author: "Dan",
+        url: "https://www.danflyingsolo.com",
+        likes: 10,
+        id: "6355440a0cbcfcb4109bf8ef",
+      },
+    ];
+
+    const result = listHelperFunctions.mostBlogs(blogs);
+    expect(result).toEqual(blogs[0].author);
+  });
+  test("when list has more than one blog, auhtor with most blogs is the one that has more author entries", () => {
+    const blogs = [
+      {
+        title: "Dan Flying Solo",
+        author: "Carlos",
+        url: "https://www.danflyingsolo.com",
+        likes: 15,
+        id: "6355440a0cbcfcb4109bf8ef",
+      },
+      {
+        title: "I am a food blog",
+        author: "Dan",
+        url: "https://iamafoodblog.com/",
+        likes: 23,
+        id: "635544760cbcfcb4109bf8f2",
+      },
+      {
+        title: "Pitchfork Blog",
+        author: "Carlos",
+        url: "https://pitchfork.com/",
+        likes: 32,
+        id: "635544a70cbcfcb4109bf8f4",
+      },
+    ];
+
+    const result = listHelperFunctions.mostBlogs(blogs);
+    expect(result).toEqual(blogs[0].author);
+  });
+});

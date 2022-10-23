@@ -16,8 +16,28 @@ const favoriteBlog = (array) => {
   return sortedArray[0].likes;
 };
 
+const mostBlogs = (array) => {
+  let authorName = "";
+  let maxSumAuthor = 0;
+  if (array.length > 0) {
+    array.forEach((element) => {
+      let author = element.author;
+      const authorArrayFiltered = array.filter((arrElement) => {
+        return author === arrElement.author;
+      });
+      if (authorArrayFiltered.length >= maxSumAuthor) {
+        authorName = author;
+        maxSumAuthor = authorArrayFiltered.length;
+      }
+    });
+  }
+
+  return authorName;
+};
+
 module.exports = {
   dummy,
   sumLikes,
   favoriteBlog,
+  mostBlogs,
 };
