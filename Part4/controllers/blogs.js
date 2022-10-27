@@ -1,5 +1,6 @@
 //Create new router object
 const blogsRouter = require("express").Router();
+const { findById } = require("../models/blog");
 //Import Blog model from models directorys
 const Blog = require("../models/blog");
 
@@ -32,6 +33,15 @@ blogsRouter.post("/", async (request, response) => {
 blogsRouter.delete("/:id", async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id);
   response.status(204).end();
+});
+
+//Controller to update a blog
+blogsRouter.put("/:id", async (request, response) => {
+  await Blog.findByIdAndUpdate(request.params.id, request.body);
+
+  const updatedBlog = await Blog.findById(request.params.id);
+
+  response.status(200).send(updatedBlog);
 });
 
 //The module exports the router to be available for all consumers of the module.module.exports = blogsRouter;
