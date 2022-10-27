@@ -80,7 +80,7 @@ test("blog has a unique identifer named id ", async () => {
   blogsAtTheStart.map((blog) => expect(blog.id).toBeDefined());
 });
 
-test("likes property is missing", async () => {
+test("likes property is missing default to 0", async () => {
   const newBlog = {
     title: "Tech Blog",
     author: "Tome",
@@ -94,6 +94,34 @@ test("likes property is missing", async () => {
     .expect("Content-Type", /application\/json/);
 
   expect(blogAdded.body.likes).toEqual(0);
+});
+
+test("title property is required", async () => {
+  const blogWithMissingTitle = {
+    title: "",
+    author: "Tome",
+    url: "https://www.macrumors.com/",
+    likes: 13,
+  };
+
+  const blogWithMissingUrl = {
+    title: "Carlos",
+    author: "Tome",
+    url: "",
+    likes: 13,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(blogWithMissingTitle)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  await api
+    .post("/api/blogs")
+    .send(blogWithMissingUrl)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
 });
 
 //Before each test, connect to DB clean database and add two blogs
