@@ -80,6 +80,22 @@ test("blog has a unique identifer named id ", async () => {
   blogsAtTheStart.map((blog) => expect(blog.id).toBeDefined());
 });
 
+test("likes property is missing", async () => {
+  const newBlog = {
+    title: "Tech Blog",
+    author: "Tome",
+    url: "https://www.macrumors.com/",
+  };
+
+  const blogAdded = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  expect(blogAdded.body.likes).toEqual(0);
+});
+
 //Before each test, connect to DB clean database and add two blogs
 beforeEach(async () => {
   await mongoose.connect(config.MONGODB_URI);
