@@ -5,19 +5,17 @@ const Blog = require("../models/blog");
 
 //All router in middleware Router ar relative to
 //Controller to get all blogs
-blogsRouter.get("/", (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs);
-  });
+blogsRouter.get("/", async (request, response) => {
+  const blogs = await Blog.find({});
+  return response.json(blogs);
 });
 
 //Controller to add new blog
-blogsRouter.post("/", (request, response) => {
+blogsRouter.post("/", async (request, response) => {
   const blog = new Blog(request.body);
 
-  blog.save().then((result) => {
-    response.status(201).json(result);
-  });
+  const blogSaved = await Blog.save();
+  return response.status(201).json(blogSaved);
 });
 
 //The module exports the router to be available for all consumers of the module.module.exports = blogsRouter;
