@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const blogsRouter = require("./controllers/blogs");
 const usersRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
 const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 
@@ -30,6 +31,8 @@ app.use(middleware.requestLogger);
 app.use("/api/blogs", blogsRouter);
 //make the users router into use in our application to dealing with endpoint "api/users"
 app.use("/api/users", usersRouter);
+//make login router into use in our application to dealing with endpoint "api/login"
+app.use("/api/login", loginRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
