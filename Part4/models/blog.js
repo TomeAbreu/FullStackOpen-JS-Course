@@ -12,6 +12,8 @@ const blogSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  //Adding reference to user document
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 blogSchema.set("toJSON", {

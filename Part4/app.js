@@ -4,6 +4,7 @@ require("express-async-errors");
 const app = express();
 const cors = require("cors");
 const blogsRouter = require("./controllers/blogs");
+const usersRouter = require("./controllers/users");
 const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 
@@ -25,7 +26,10 @@ app.use(express.static("build"));
 app.use(express.json());
 app.use(middleware.requestLogger);
 
+//make the blogs router into use in our application to dealing with endpoint "api/blogs"
 app.use("/api/blogs", blogsRouter);
+//make the users router into use in our application to dealing with endpoint "api/users"
+app.use("/api/users", usersRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
