@@ -41,8 +41,7 @@ const tokenExtractor = (request, response, next) => {
     request.token = null;
   }
 
-  console.log("REQUEST TOKEN MIDDLEWARE: ", request.token);
-
+  //Pass control to next middleware
   next();
 };
 

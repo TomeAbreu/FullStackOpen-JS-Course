@@ -8,6 +8,7 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 
 const jwt = require("jsonwebtoken");
+const { info } = require("../utils/logger");
 
 //Controller to get all blogs
 blogsRouter.get("/", async (request, response) => {
@@ -29,7 +30,8 @@ blogsRouter.get("/:id", async (request, response) => {
 blogsRouter.post("/", async (request, response) => {
   const body = request.body;
 
-  console.log("Token: ", request.token);
+  //The token is in request.token because of miidleware getTokenFrom
+
   //Get the user object {username, id} decoded from the token verify function
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
   if (!decodedToken.id) {
@@ -57,8 +59,31 @@ blogsRouter.post("/", async (request, response) => {
 
 //Controller to delete a blog
 blogsRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
-  response.status(204).end();
+  //Get the token from the request
+  const token = request.token;
+
+  //Get the user object {username, id} decoded from the token verify function
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  //Check if user of the request is the same as the creator of the blog(blog.user)
+
+  //get the user who made the request
+  const user = await User.findById(decodedToken.id);
+
+  //get blog to delete
+  const blog = await Blog.findById(request.params.id);
+
+  if (blog.user.toString() === user.id) {
+    await Blog.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } else {
+    response
+      .status(400)
+      .send({ error: "Not possible to delete blog not owned by you" });
+  }
 });
 
 //Controller to update a blog
