@@ -27,6 +27,9 @@ app.use(express.static("build"));
 app.use(express.json());
 app.use(middleware.requestLogger);
 
+//Middleware tokenExtractor before requests
+app.use(middleware.tokenExtractor);
+
 //make the blogs router into use in our application to dealing with endpoint "api/blogs"
 app.use("/api/blogs", blogsRouter);
 //make the users router into use in our application to dealing with endpoint "api/users"

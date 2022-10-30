@@ -26,12 +26,29 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === "TokenExpiredError") {
     return response.status(401).json({ error: "token expired" });
   }
-  logger.error(error.message);
+  //Move control to next middleware
   next(error);
+};
+
+//Extract the token from request middleware
+const tokenExtractor = (request, response, next) => {
+  // code that extracts the token
+  const authorization = request.get("authorization");
+  console.log("Authorization: ", authorization);
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    request.token = authorization.substring(7);
+  } else {
+    request.token = null;
+  }
+
+  console.log("REQUEST TOKEN MIDDLEWARE: ", request.token);
+
+  next();
 };
 
 module.exports = {
   unknownEndpoint,
   errorHandler,
   requestLogger,
+  tokenExtractor,
 };
