@@ -29,6 +29,8 @@ app.use(middleware.requestLogger);
 
 //Middleware tokenExtractor before requests
 app.use(middleware.tokenExtractor);
+//Middleware userExtractor before requests
+app.use(middleware.userExtractor);
 
 //make the blogs router into use in our application to dealing with endpoint "api/blogs"
 app.use("/api/blogs", blogsRouter);

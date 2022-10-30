@@ -6,6 +6,7 @@ const usersRouter = require("express").Router();
 
 //Import User model from models directorys
 const User = require("../models/user");
+const { info } = require("../utils/logger");
 
 //Get the users route handler
 usersRouter.get("/", async (request, response) => {
@@ -16,6 +17,17 @@ usersRouter.get("/", async (request, response) => {
     author: 1,
   });
   response.json(users);
+});
+
+//Get the users route handler
+usersRouter.get("/:id", async (request, response) => {
+  const user = await User.findById(request.params.id).populate("blogs", {
+    url: 1,
+    title: 1,
+    author: 1,
+  });
+
+  return response.status(200).json(user);
 });
 
 //Add user route handler

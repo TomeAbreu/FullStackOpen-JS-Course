@@ -7,7 +7,6 @@ const Blog = require("../models/blog");
 //Import User mode from models direactory
 const User = require("../models/user");
 
-const jwt = require("jsonwebtoken");
 const { info } = require("../utils/logger");
 
 //Controller to get all blogs
@@ -30,16 +29,8 @@ blogsRouter.get("/:id", async (request, response) => {
 blogsRouter.post("/", async (request, response) => {
   const body = request.body;
 
-  //The token is in request.token because of miidleware getTokenFrom
-
-  //Get the user object {username, id} decoded from the token verify function
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token missing or invalid" });
-  }
-
-  //get the user
-  const user = await User.findById(decodedToken.id);
+  //get the user from token in request with previous middleware extractUser and extractToken
+  const user = request.user;
 
   const blog = new Blog({
     title: body.title,
@@ -59,20 +50,8 @@ blogsRouter.post("/", async (request, response) => {
 
 //Controller to delete a blog
 blogsRouter.delete("/:id", async (request, response) => {
-  //Get the token from the request
-  const token = request.token;
-
-  //Get the user object {username, id} decoded from the token verify function
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token missing or invalid" });
-  }
-
-  //Check if user of the request is the same as the creator of the blog(blog.user)
-
-  //get the user who made the request
-  const user = await User.findById(decodedToken.id);
-
+  //get the user from token in request with previous middleware extractUser and extractToken
+  const user = request.user;
   //get blog to delete
   const blog = await Blog.findById(request.params.id);
 
