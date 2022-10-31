@@ -5,6 +5,10 @@ const config = require("../utils/config");
 const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { application } = require("express");
 
 describe("When there is initially some blogs saved", () => {
   test("blogs are returned as json", async () => {
@@ -45,21 +49,6 @@ describe("When there is initially some blogs saved", () => {
 
       expect(blogTest.body).toEqual(processedBlogToView);
     });
-    test("when likes property is missing default number of likes is 0", async () => {
-      const newBlog = {
-        title: "Tech Blog",
-        author: "Tome",
-        url: "https://www.macrumors.com/",
-      };
-
-      const blogAdded = await api
-        .post("/api/blogs")
-        .send(newBlog)
-        .expect(201)
-        .expect("Content-Type", /application\/json/);
-
-      expect(blogAdded.body.likes).toEqual(0);
-    });
 
     test("fails with status 400 if title or url is missing", async () => {
       const blogWithMissingTitle = {
@@ -92,15 +81,45 @@ describe("When there is initially some blogs saved", () => {
 
   describe("Addition of a new blog", () => {
     test("a valid blog can be added", async () => {
+      //Create a user
+      const user = {
+        username: "motu",
+        name: "Master of the Universe",
+        password: "motu",
+      };
+
+      //Create user request
+      await api.post("/api/users/").send(user).expect(201);
+
+      const userLogin = {
+        username: user.username,
+        password: user.password,
+      };
+      //Get token info with Login Request
+      const userLoginData = await api
+        .post("/api/login/")
+        .send(userLogin)
+        .expect(200);
+
+      //Get user info with userExtractor middleware
+      const decodedToken = jwt.verify(
+        userLoginData.body.token,
+        process.env.SECRET
+      );
+
+      //Blog to add with user Id
       const newBlog = {
         title: "Tech Blog",
         author: "Tome",
         url: "https://www.macrumors.com/",
         likes: 22,
+        user: decodedToken.id,
       };
 
+      //Send token to create blog for this user
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${userLoginData.body.token}`)
         .send(newBlog)
         .expect(201)
         .expect("Content-Type", /application\/json/);
@@ -112,6 +131,100 @@ describe("When there is initially some blogs saved", () => {
       expect(blogs).toHaveLength(helper.initialBlogs.length + 1);
       expect(titles).toContain("Tech Blog");
     });
+
+    test("a valid blog can't be added if token is invalid or missing", async () => {
+      //Create a user
+      const user = {
+        username: "motu",
+        name: "Master of the Universe",
+        password: "motu",
+      };
+
+      //Create user request
+      await api.post("/api/users/").send(user).expect(201);
+
+      const userLogin = {
+        username: user.username,
+        password: user.password,
+      };
+      //Get token info with Login Request
+      const userLoginData = await api
+        .post("/api/login/")
+        .send(userLogin)
+        .expect(200);
+
+      //Get user info with userExtractor middleware
+      const decodedToken = jwt.verify(
+        userLoginData.body.token,
+        process.env.SECRET
+      );
+
+      //Blog to add with user Id
+      const newBlog = {
+        title: "Tech Blog",
+        author: "Tome",
+        url: "https://www.macrumors.com/",
+        likes: 22,
+        user: decodedToken.id,
+      };
+
+      //Send token to create blog for this user
+      await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer carlos`)
+        .send(newBlog)
+        .expect(401)
+        .expect("Content-Type", /application\/json/);
+
+      const blogs = await helper.blogsInDb();
+
+      const titles = blogs.map((r) => r.title);
+
+      expect(blogs).toHaveLength(helper.initialBlogs.length);
+    });
+
+    test("when likes property is missing default number of likes is 0", async () => {
+      //Create a user
+      const user = {
+        username: "motu",
+        name: "Master of the Universe",
+        password: "motu",
+      };
+
+      //Create user request
+      await api.post("/api/users/").send(user).expect(201);
+
+      const userLogin = {
+        username: user.username,
+        password: user.password,
+      };
+      //Get token info with Login Request
+      const userLoginData = await api
+        .post("/api/login/")
+        .send(userLogin)
+        .expect(200);
+
+      //Get user info with userExtractor middleware
+      const decodedToken = jwt.verify(
+        userLoginData.body.token,
+        process.env.SECRET
+      );
+
+      const newBlog = {
+        title: "Tech Blog",
+        author: "Tome",
+        url: "https://www.macrumors.com/",
+      };
+
+      const blogAdded = await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer ${userLoginData.body.token}`)
+        .send(newBlog)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      expect(blogAdded.body.likes).toEqual(0);
+    });
   });
 
   describe("Deletion of a blog", () => {
@@ -119,14 +232,58 @@ describe("When there is initially some blogs saved", () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToDelete = blogsAtStart[0];
 
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+      //Create new user in database
+      const newUser = {
+        username: "motu",
+        name: "Master of the Universe",
+        password: "motu",
+      };
+      await api.post("/api/users/").send(newUser).expect(201);
+      //Login with user
+      const userLogin = {
+        username: "motu",
+        password: "motu",
+      };
+      const userLoginData = await api
+        .post("/api/login")
+        .send(userLogin)
+        .expect(200);
+
+      //Get user info with userExtractor middleware
+      const decodedToken = jwt.verify(
+        userLoginData.body.token,
+        process.env.SECRET
+      );
+
+      //Blog to add with user Id
+      const newBlog = {
+        title: "Tech Blog",
+        author: "Tome",
+        url: "https://www.macrumors.com/",
+        likes: 22,
+        user: decodedToken.id,
+      };
+
+      //Send token to create blog for this user
+      const blogAdded = await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer ${userLoginData.body.token}`)
+        .send(newBlog)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      await api
+        .delete(`/api/blogs/${blogAdded.body.id}`)
+        .set("Authorization", `Bearer ${userLoginData.body.token}`)
+        .expect(204);
+
       const blogsAtEnd = await helper.blogsInDb();
 
-      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
 
       const titles = blogsAtEnd.map((r) => r.title);
 
-      expect(titles).not.toContain(blogToDelete.title);
+      expect(titles).not.toContain(blogAdded.title);
     });
   });
 
@@ -156,13 +313,16 @@ describe("When there is initially some blogs saved", () => {
 beforeEach(async () => {
   await mongoose.connect(config.MONGODB_URI);
   await Blog.deleteMany({});
+  await User.deleteMany({});
   console.log("cleared");
 
   const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
   const promiseArray = blogObjects.map((blog) => blog.save());
+  console.log("Done creating blogs");
+
   await Promise.all(promiseArray);
 
-  console.log("done");
+  console.log("All done");
 }, 100000);
 
 //Close connection to database in the end of the tests
