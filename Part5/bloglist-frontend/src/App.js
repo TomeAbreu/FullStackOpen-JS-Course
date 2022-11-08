@@ -22,13 +22,14 @@ const App = () => {
     });
   }, []);
 
-  //Use Effect only run when state is empty array(initial rendering): Check if user is logged in already
+  //Use Effect only run when state is empty array(initial rendering):
+  //Check if user is logged in in local storage and set state user variable and save token in blogService
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      //noteService.setToken(user.token)
+      blogService.setToken(user.token);
     }
   }, []);
 
@@ -54,7 +55,7 @@ const App = () => {
         setNotificationMessage(null);
       }, 3000);
     } catch (exception) {
-      setErrorMessage("Wrong credentials");
+      setErrorMessage("Wrong user credentials");
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000);
@@ -76,8 +77,6 @@ const App = () => {
       //get state blog info
       const blog = { author: blogAuthor, title: blogTitle, url: blogUrl };
 
-      //Set user token in blogService
-      blogService.setToken(user.token);
       //Create new blog request
       const newBlog = await blogService.addBlog(blog);
       //set state variables
@@ -87,13 +86,18 @@ const App = () => {
       setBlogUrl("");
 
       //Add success notification
-      setNotificationMessage(`Welcome ${username}`);
+      setNotificationMessage(
+        `A new blog ${newBlog.title} by ${newBlog.author} added`
+      );
       setTimeout(() => {
         setNotificationMessage(null);
       }, 3000);
     } catch (exception) {
       //Add notification error message in case of error creating new blog
-      console.log("ERROR CREATING BLOG: ", exception);
+      setErrorMessage(`Could not create a new blog`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
   };
 
