@@ -32,6 +32,12 @@ blogsRouter.post("/", async (request, response) => {
   //get the user from token in request with previous middleware extractUser and extractToken
   const user = request.user;
 
+  if (!user) {
+    return response
+      .status(401)
+      .json({ token: "No user info was present in request" });
+  }
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
