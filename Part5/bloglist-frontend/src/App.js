@@ -11,6 +11,9 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogAuthor, setBlogAuthor] = useState("");
+  const [blogUrl, setBlogUrl] = useState("");
 
   //Use Effect only run when state is empty array(initial rendering): Get all blogs
   useEffect(() => {
@@ -36,11 +39,16 @@ const App = () => {
     try {
       //Login user
       const user = await userService.login(userInfo);
+      //Set state user with user
+      setUser(user);
+      //Set user token in blogService
+      blogService.setToken(user.token);
       //Save user information in local storage
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
-      setUser(user);
+      //Reset state variables for username and password in the login form
       setUsername("");
       setPassword("");
+      //Notification messages in case of success or failure
       setNotificationMessage(`Welcome ${username}`);
       setTimeout(() => {
         setNotificationMessage(null);
@@ -58,6 +66,34 @@ const App = () => {
     if (user) {
       window.localStorage.removeItem("loggedBlogAppUser");
       setUser(null);
+    }
+  };
+
+  //Function to handle creation of new blog
+  const handleNewBlog = async () => {
+    //Send request to blog service to create new blog
+    try {
+      //get state blog info
+      const blog = { author: blogAuthor, title: blogTitle, url: blogUrl };
+
+      //Set user token in blogService
+      blogService.setToken(user.token);
+      //Create new blog request
+      const newBlog = await blogService.addBlog(blog);
+      //set state variables
+      setBlogs(blogs.concat(newBlog));
+      setBlogTitle("");
+      setBlogAuthor("");
+      setBlogUrl("");
+
+      //Add success notification
+      setNotificationMessage(`Welcome ${username}`);
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 3000);
+    } catch (exception) {
+      //Add notification error message in case of error creating new blog
+      console.log("ERROR CREATING BLOG: ", exception);
     }
   };
 
@@ -106,6 +142,42 @@ const App = () => {
           {user.username} is logged in{" "}
           <button onClick={handleLogout}>Logout</button>
         </h3>
+        {/*Form to create a new blog*/}
+        <form>
+          <div>
+            {" "}
+            title:
+            <input
+              type="text"
+              value={blogTitle}
+              name="BlogTitle"
+              onChange={({ target }) => setBlogTitle(target.value)}
+            />
+          </div>
+          <div>
+            {" "}
+            author:{" "}
+            <input
+              type="text"
+              value={blogAuthor}
+              name="BlogAuthor"
+              onChange={({ target }) => setBlogAuthor(target.value)}
+            />{" "}
+          </div>{" "}
+          <div>
+            {" "}
+            url:{" "}
+            <input
+              type="url"
+              value={blogUrl}
+              name="BlogUrl"
+              onChange={({ target }) => setBlogUrl(target.value)}
+            />{" "}
+          </div>{" "}
+          <button type="button" onClick={handleNewBlog}>
+            create
+          </button>{" "}
+        </form>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
