@@ -12,20 +12,32 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  //get all blogs
+  //Use Effect only run when state is empty array(initial rendering): Get all blogs
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       setBlogs(blogs);
     });
   }, []);
 
+  //Use Effect only run when state is empty array(initial rendering): Check if user is logged in already
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      //noteService.setToken(user.token)
+    }
+  }, []);
+
   //When submit login form button is clicked
   const handleLogin = async (event) => {
     event.preventDefault();
-    console.log("logging in with", username, password);
     const userInfo = { username: username, password: password };
     try {
+      //Login user
       const user = await userService.login(userInfo);
+      //Save user information in local storage
+      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       setUser(user);
       setUsername("");
       setPassword("");
@@ -38,6 +50,14 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000);
+    }
+  };
+
+  const handleLogout = () => {
+    //Remove user from local storage and from state
+    if (user) {
+      window.localStorage.removeItem("loggedBlogAppUser");
+      setUser(null);
     }
   };
 
@@ -82,7 +102,10 @@ const App = () => {
           error={errorMessage}
         ></Notification>
         <h2>blogs</h2>
-        <h3>{user.username} is logged in</h3>
+        <h3>
+          {user.username} is logged in{" "}
+          <button onClick={handleLogout}>Logout</button>
+        </h3>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
