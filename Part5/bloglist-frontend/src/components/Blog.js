@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, updateBlogLikesCallBack }) => {
+const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
   const [blogDetailsVisible, setBlogDetailsVisible] = useState(false);
 
   const toggleBlogDetails = () => {
@@ -21,6 +21,17 @@ const Blog = ({ blog, updateBlogLikesCallBack }) => {
     } catch (error) {}
   };
 
+  const showDeleteButton = () => (
+    <button onClick={handleDeleteBlog}>Delete</button>
+  );
+
+  const handleDeleteBlog = async () => {
+    console.log("DELETE BLOG");
+    try {
+      await blogService.deleteBlog(blog.id);
+      deleteBlogCallBack(blog.id);
+    } catch {}
+  };
   const showBlogDetails = () => (
     <div>
       <p>{blog.url}</p>
@@ -28,8 +39,8 @@ const Blog = ({ blog, updateBlogLikesCallBack }) => {
         <span>{blog.likes}</span>
         <button onClick={handleIncreaseLike}>like</button>
       </div>
-
       <p>{blog.author}</p>
+      {user.username === blog.user.username && showDeleteButton()}
     </div>
   );
 

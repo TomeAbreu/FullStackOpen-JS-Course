@@ -17,9 +17,14 @@ const addBlog = async (blog) => {
 };
 
 const updateBlog = async (blog) => {
-  console.log("Blog to be updated: ", blog);
   const config = { headers: { Authorization: token } };
   const response = await axios.put(baseUrl + `/${blog.id}`, blog, config);
+  return response.data;
+};
+
+const deleteBlog = async (blogId) => {
+  const config = { headers: { Authorization: token } };
+  const response = await axios.delete(baseUrl + `/${blogId}`, config);
   return response.data;
 };
 
@@ -27,4 +32,4 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`;
 };
 
-export default { getAll, addBlog, updateBlog, setToken };
+export default { getAll, addBlog, updateBlog, deleteBlog, setToken };

@@ -85,6 +85,14 @@ const App = () => {
     setBlogs(blogsUpdated);
   };
 
+  const deleteBlog = (blogId) => {
+    const blogsWithoutDeleted = blogs.filter((blog) => {
+      return blogId !== blog.id;
+    });
+    console.log(blogsWithoutDeleted);
+    setBlogs(blogsWithoutDeleted);
+  };
+
   //Function to handle creation of new blog
   const handleNewBlog = async (blog) => {
     //Access to visibility function to hide form in Toggable component
@@ -170,6 +178,8 @@ const App = () => {
               key={blog.id}
               blog={blog}
               updateBlogLikesCallBack={updateBlogLikes}
+              deleteBlogCallBack={deleteBlog}
+              user={user}
             />
           ))}
       </div>
