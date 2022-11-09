@@ -1,20 +1,34 @@
 import React from "react";
 import { useState } from "react";
+import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlogLikesCallBack }) => {
   const [blogDetailsVisible, setBlogDetailsVisible] = useState(false);
 
   const toggleBlogDetails = () => {
     if (!blogDetailsVisible) {
-      console.log("Show blog details");
     }
     setBlogDetailsVisible(!blogDetailsVisible);
+  };
+
+  const handleIncreaseLike = async () => {
+    blog.likes = blog.likes + 1;
+
+    //Make put request to update blog
+    try {
+      const blogUpdated = await blogService.updateBlog(blog);
+      updateBlogLikesCallBack(blog.id, blogUpdated.likes);
+    } catch (error) {}
   };
 
   const showBlogDetails = () => (
     <div>
       <p>{blog.url}</p>
-      <p>{blog.likes}</p>
+      <div>
+        <span>{blog.likes}</span>
+        <button onClick={handleIncreaseLike}>like</button>
+      </div>
+
       <p>{blog.author}</p>
     </div>
   );
