@@ -26,11 +26,12 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
   );
 
   const handleDeleteBlog = async () => {
-    console.log("DELETE BLOG");
-    try {
-      await blogService.deleteBlog(blog.id);
-      deleteBlogCallBack(blog.id);
-    } catch {}
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.deleteBlog(blog.id);
+        deleteBlogCallBack(blog.id);
+      } catch {}
+    }
   };
   const showBlogDetails = () => (
     <div>
