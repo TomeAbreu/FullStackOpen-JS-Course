@@ -1,38 +1,40 @@
-import React from "react";
-import { useState } from "react";
-import blogService from "../services/blogs";
+import React from 'react'
+import { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
-  const [blogDetailsVisible, setBlogDetailsVisible] = useState(false);
+  const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
 
   const toggleBlogDetails = () => {
-    if (!blogDetailsVisible) {
-    }
-    setBlogDetailsVisible(!blogDetailsVisible);
-  };
+    setBlogDetailsVisible(!blogDetailsVisible)
+  }
 
   const handleIncreaseLike = async () => {
-    blog.likes = blog.likes + 1;
+    blog.likes = blog.likes + 1
 
     //Make put request to update blog
     try {
-      const blogUpdated = await blogService.updateBlog(blog);
-      updateBlogLikesCallBack(blog.id, blogUpdated.likes);
-    } catch (error) {}
-  };
+      const blogUpdated = await blogService.updateBlog(blog)
+      updateBlogLikesCallBack(blog.id, blogUpdated.likes)
+    } catch (error) {
+      console.log('Error updateing blog')
+    }
+  }
 
   const showDeleteButton = () => (
     <button onClick={handleDeleteBlog}>Delete</button>
-  );
+  )
 
   const handleDeleteBlog = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
-        await blogService.deleteBlog(blog.id);
-        deleteBlogCallBack(blog.id);
-      } catch {}
+        await blogService.deleteBlog(blog.id)
+        deleteBlogCallBack(blog.id)
+      } catch (error) {
+        console.log('Error removing blog')
+      }
     }
-  };
+  }
   const showBlogDetails = () => (
     <div>
       <p>{blog.url}</p>
@@ -43,17 +45,17 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
       <p>{blog.author}</p>
       {user.username === blog.user.username && showDeleteButton()}
     </div>
-  );
+  )
 
   return (
-    <div className="blog">
+    <div className='blog'>
       <span>{blog.title} </span>
       <button onClick={toggleBlogDetails}>
-        {blogDetailsVisible ? "hide" : "view"}
+        {blogDetailsVisible ? 'hide' : 'view'}
       </button>
       {blogDetailsVisible === true && showBlogDetails()}
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

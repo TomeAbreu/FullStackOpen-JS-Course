@@ -1,67 +1,67 @@
-import React from "react";
-import { useState } from "react";
+import React from 'react'
+import { useState } from 'react'
 
 const NewBlogForm = ({ handleNewBlog }) => {
-  const [blogTitle, setBlogTitle] = useState("");
-  const [blogAuthor, setBlogAuthor] = useState("");
-  const [blogUrl, setBlogUrl] = useState("");
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
 
   //Function when creating a new blog
   const addNewBlog = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const blogToAdd = { author: blogAuthor, title: blogTitle, url: blogUrl };
+    const blogToAdd = { author: blogAuthor, title: blogTitle, url: blogUrl }
     //Execute function in App component to create a new blog and add it to state
     //varialbe blogs in App compoennt
-    await handleNewBlog(blogToAdd);
+    await handleNewBlog(blogToAdd)
 
     //Reset state variables for blog fom
-    setBlogTitle("");
-    setBlogAuthor("");
-    setBlogUrl("");
-  };
+    setBlogTitle('')
+    setBlogAuthor('')
+    setBlogUrl('')
+  }
 
   return (
     <div>
-      {" "}
+      {' '}
       <h3>Create new blog</h3>
       <form>
         <div>
-          {" "}
+          {' '}
           title:
           <input
-            type="text"
+            type='text'
             value={blogTitle}
-            name="blogTitle"
+            name='blogTitle'
             onChange={({ target }) => setBlogTitle(target.value)}
           />
         </div>
         <div>
-          {" "}
-          author:{" "}
+          {' '}
+          author:{' '}
           <input
-            type="text"
+            type='text'
             value={blogAuthor}
-            name="blogAuthor"
+            name='blogAuthor'
             onChange={({ target }) => setBlogAuthor(target.value)}
-          />{" "}
-        </div>{" "}
+          />{' '}
+        </div>{' '}
         <div>
-          {" "}
-          url:{" "}
+          {' '}
+          url:{' '}
           <input
-            type="url"
+            type='url'
             value={blogUrl}
-            name="blogUrl"
+            name='blogUrl'
             onChange={({ target }) => setBlogUrl(target.value)}
-          />{" "}
-        </div>{" "}
-        <button type="button" onClick={addNewBlog}>
+          />{' '}
+        </div>{' '}
+        <button type='button' onClick={addNewBlog}>
           create
-        </button>{" "}
+        </button>{' '}
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default NewBlogForm;
+export default NewBlogForm
