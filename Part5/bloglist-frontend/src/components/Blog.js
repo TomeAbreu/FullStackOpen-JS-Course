@@ -42,14 +42,13 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
         <span>{blog.likes}</span>
         <button onClick={handleIncreaseLike}>like</button>
       </div>
-      <p>{blog.author}</p>
       {user.username === blog.user.username && showDeleteButton()}
     </div>
   )
 
   return (
     <div className='blog'>
-      <span>{blog.title} </span>
+      <span>{blog.title} </span> <span>{blog.author}</span>
       <button onClick={toggleBlogDetails}>
         {blogDetailsVisible ? 'hide' : 'view'}
       </button>
