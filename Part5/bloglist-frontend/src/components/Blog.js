@@ -14,10 +14,17 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
 
     //Make put request to update blog
     try {
-      const blogUpdated = await blogService.updateBlog(blog)
+      const blogToBeUpdated = {
+        id: blog.id,
+        author: blog.author,
+        url: blog.url,
+        title: blog.title,
+        likes: blog.likes,
+      }
+      const blogUpdated = await blogService.updateBlog(blogToBeUpdated)
       updateBlogLikesCallBack(blog.id, blogUpdated.likes)
     } catch (error) {
-      console.log('Error updateing blog')
+      console.log('Error updating blog')
     }
   }
 
