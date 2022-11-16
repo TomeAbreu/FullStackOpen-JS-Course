@@ -49,3 +49,38 @@ test('cliking in view detais blog button will show likes and url', async () => {
   expect(div).toHaveTextContent('https://pdsdsds.com')
   expect(div).toHaveTextContent(20)
 })
+
+test('cliking in likes button two times props event handler is received 2 times', async () => {
+  const blog = {
+    author: 'Tome',
+    title: 'Component blog testing  title',
+    url: 'https://pdsdsds.com',
+    likes: 20,
+    user: {
+      username: 'motu',
+    },
+  }
+
+  const user = {
+    username: 'motu',
+  }
+
+  const mockHandler = jest.fn()
+
+  //Render Component
+  const { container } = render(
+    <Blog blog={blog} user={user} updateBlogLikesCallBack={mockHandler} />
+  )
+
+  // A session is started to interact with the rendered component:
+  const userEventSession = userEvent.setup()
+  const buttonBlogDetails = screen.getByText('view')
+  await userEventSession.click(buttonBlogDetails)
+
+  const buttonLikes = screen.getByText('like')
+  //Click button like 2 times
+  await userEventSession.click(buttonLikes)
+  await userEventSession.click(buttonLikes)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
