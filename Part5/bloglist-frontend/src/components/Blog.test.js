@@ -68,9 +68,7 @@ test('cliking in likes button two times props event handler is received 2 times'
   const mockHandler = jest.fn()
 
   //Render Component
-  const { container } = render(
-    <Blog blog={blog} user={user} updateBlogLikesCallBack={mockHandler} />
-  )
+  render(<Blog blog={blog} user={user} updateBlogLikesCallBack={mockHandler} />)
 
   // A session is started to interact with the rendered component:
   const userEventSession = userEvent.setup()
