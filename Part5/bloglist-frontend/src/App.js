@@ -17,13 +17,6 @@ const App = () => {
 
   const newBlogRef = useRef()
 
-  //Use Effect only run when state is empty array(initial rendering): Get all blogs
-  useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      setBlogs(blogs)
-    })
-  }, [])
-
   //Use Effect only run when state is empty array(initial rendering):
   //Check if user is logged in in local storage and set state user variable and save token in blogService
   useEffect(() => {
@@ -32,6 +25,14 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
+
+      const getAllBlogs = async () => {
+        //Get all the blogs
+        const blogsData = await blogService.getAll()
+
+        setBlogs(blogsData.sort((a, b) => b.likes - a.likes))
+      }
+      getAllBlogs()
     }
   }, [])
 
@@ -137,6 +138,7 @@ const App = () => {
               type='text'
               value={username}
               name='Username'
+              id='username'
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
@@ -147,10 +149,13 @@ const App = () => {
               type='password'
               value={password}
               name='Password'
+              id='password'
               onChange={({ target }) => setPassword(target.value)}
             />{' '}
           </div>{' '}
-          <button type='submit'>login</button>{' '}
+          <button id='login-button' type='submit'>
+            login
+          </button>{' '}
         </form>
       </div>
     )
