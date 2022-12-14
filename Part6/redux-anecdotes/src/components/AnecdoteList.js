@@ -11,9 +11,12 @@ const Anecdote = ({ anecdote, handleClick }) => {
 }
 
 const AnecdoteList = () => {
+  //UseDispatch: Hook to Dispatch Action to Redux Store to change state
   const dispatch = useDispatch()
+
+  //UseSelector: Hook to get state from Redux Store
   const anecdotes = useSelector((state) =>
-    state.sort((a, b) => b.votes - a.votes)
+    state.anecdotes.sort((a, b) => b.votes - a.votes)
   )
 
   return (
