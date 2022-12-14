@@ -34,6 +34,9 @@ const anecdoteReducer = (state = initialState, action) => {
         votes: anecdoteToIncreaseVote.votes + 1,
       }
       return state.map((note) => (note.id !== id ? note : increasedAnecdote))
+    case 'FILTER_CHANGE':
+      const filterValue = action.data.inputValue
+      return state.filter((note) => note.content.includes(filterValue))
     default:
       return state
   }
@@ -58,6 +61,14 @@ export const increaseVote = (id) => {
   return {
     type: 'INCREASE_VOTE',
     data: { id },
+  }
+}
+
+//Action creator filterChange
+export const filterChange = (inputValue) => {
+  return {
+    type: 'FILTER_CHANGE',
+    data: { inputValue },
   }
 }
 
