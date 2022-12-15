@@ -57,7 +57,7 @@ export const {
   setAnecdotes,
 } = anecdoteSlice.actions
 
-//Async Action creator using Redux Thunk library
+//Async Action creator to initialize Anecdotes state using Redux Thunk library
 export const initializeNotes = () => {
   return async (dispatch) => {
     //Fetch data from the server
@@ -66,4 +66,14 @@ export const initializeNotes = () => {
     dispatch(setAnecdotes(anecdotes))
   }
 }
+
+//Async Action creator to create a new Anecdote and update state of Anecdotes
+// using Redux Thunk library
+export const createAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch(appendAnecdote(newAnecdote))
+  }
+}
+
 export default anecdoteSlice.reducer
