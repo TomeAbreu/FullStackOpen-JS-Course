@@ -16,9 +16,8 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
 
   //UseSelector: Hook to get state from Redux Store
-  const anecdotes = useSelector((state) =>
-    state.anecdotes.sort((a, b) => b.votes - a.votes)
-  )
+  const anecdotes = useSelector((state) => state.anecdotes).slice()
+  const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes)
 
   const handleIncreaseVote = (anecdote) => {
     dispatch(increaseVote(anecdote.id))
@@ -30,7 +29,7 @@ const AnecdoteList = () => {
 
   return (
     <ul>
-      {anecdotes.map((anecdote) => (
+      {sortedAnecdotes.map((anecdote) => (
         <Anecdote
           key={anecdote.id}
           anecdote={anecdote}
