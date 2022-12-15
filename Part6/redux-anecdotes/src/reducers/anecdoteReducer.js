@@ -3,6 +3,7 @@
 //state=initialState tells reducer the default state in the store
 
 import { createSlice } from '@reduxjs/toolkit'
+import anecdoteService from '../services/anecdotes'
 
 const initialState = []
 
@@ -55,4 +56,14 @@ export const {
   appendAnecdote,
   setAnecdotes,
 } = anecdoteSlice.actions
+
+//Async Action creator using Redux Thunk library
+export const initializeNotes = () => {
+  return async (dispatch) => {
+    //Fetch data from the server
+    const anecdotes = await anecdoteService.getAll()
+    //Update state dispatch setAnecdotes action in the redux store
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
 export default anecdoteSlice.reducer

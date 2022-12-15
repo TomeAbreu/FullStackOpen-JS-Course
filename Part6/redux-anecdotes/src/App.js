@@ -3,20 +3,16 @@ import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
 import Filter from './components/Filter'
 import { useDispatch } from 'react-redux'
-import anecdotesService from './services/anecdotes'
 import { useEffect } from 'react'
-import { setAnecdotes } from './reducers/anecdoteReducer'
+import { initializeNotes } from './reducers/anecdoteReducer'
 
 const App = () => {
   //UseDispatch Hook
   const dispatch = useDispatch()
 
-  //UseEffect Hook to get anecdotes from the service and dispatch to initialize state of anecdotes
+  //UseEffect Hook to dispatch async action creator initializeNotes
   useEffect(() => {
-    anecdotesService.getAll().then((anecdotes) => {
-      console.log('Get ANECDOTES FROM SERVER: ', anecdotes)
-      dispatch(setAnecdotes(anecdotes))
-    })
+    dispatch(initializeNotes())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
