@@ -25,6 +25,7 @@ export const { showNotification } = notificationSlice.actions
 // //Async Action creator to showNotification and update state of notification
 // using Redux Thunk library
 export const showNotificationAction = (message, awaitTime) => {
+  console.log('OLA')
   return async (dispatch) => {
     dispatch(showNotification(message))
     await setNotificationTimer(awaitTime * 1000)
