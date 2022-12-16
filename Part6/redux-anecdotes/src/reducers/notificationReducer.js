@@ -19,5 +19,21 @@ const notificationSlice = createSlice({
   },
 })
 
+//Export reducer method  inside slice
 export const { showNotification } = notificationSlice.actions
+
+// //Async Action creator to showNotification and update state of notification
+// using Redux Thunk library
+export const showNotificationAction = (message, awaitTime) => {
+  return async (dispatch) => {
+    dispatch(showNotification(message))
+    await setNotificationTimer(awaitTime * 1000)
+    dispatch(showNotification(null))
+  }
+}
+//Promise to wait for timer to reset notification to null
+//resolve will be called when time is done and await will consume resolve method of Promise
+const setNotificationTimer = (time) =>
+  new Promise((resolve) => setTimeout(resolve, time))
+
 export default notificationSlice.reducer
