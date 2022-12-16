@@ -22,7 +22,7 @@ const AnecdoteList = () => {
   const handleIncreaseVote = (anecdote) => {
     const anecdoteToBeUpdated = { ...anecdote, votes: anecdote.votes + 1 }
     dispatch(increaseVoteAnecdote(anecdoteToBeUpdated))
-    dispatch(showNotificationAction(`You voted '${anecdote.content}'`, 10))
+    dispatch(showNotificationAction(`You voted '${anecdote.content}'`, 5))
   }
 
   return (

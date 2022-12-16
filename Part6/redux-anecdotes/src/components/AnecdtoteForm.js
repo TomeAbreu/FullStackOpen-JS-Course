@@ -9,7 +9,7 @@ const AnecdoteForm = (props) => {
     event.target.note.value = ''
     //Dispatch actions using connect dispatch passes as props with ConnectedAnecdoteForm
     props.createAnecdote(content)
-    props.showNotificationAction(`You added '${content}'`, 10)
+    props.showNotificationAction(`You added '${content}'`, 5)
   }
 
   return (

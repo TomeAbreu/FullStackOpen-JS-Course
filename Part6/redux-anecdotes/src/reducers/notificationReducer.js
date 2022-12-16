@@ -27,13 +27,18 @@ export const { showNotification } = notificationSlice.actions
 export const showNotificationAction = (message, awaitTime) => {
   return async (dispatch) => {
     dispatch(showNotification(message))
+
     await setNotificationTimer(awaitTime * 1000)
+
     dispatch(showNotification(null))
   }
 }
 //Promise to wait for timer to reset notification to null
 //resolve will be called when time is done and await will consume resolve method of Promise
-const setNotificationTimer = (time) =>
-  new Promise((resolve) => setTimeout(resolve, time))
+const setNotificationTimer = (time) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time)
+  })
+}
 
 export default notificationSlice.reducer
