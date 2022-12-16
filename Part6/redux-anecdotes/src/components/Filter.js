@@ -1,18 +1,16 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import { filterChange } from '../reducers/anecdoteReducer'
+import { connect } from 'react-redux'
 
-const Filter = () => {
+const Filter = (props) => {
   const style = {
     marginBottom: 10,
   }
 
-  const dispatch = useDispatch()
-
   const handleFilterChange = (event) => {
     event.preventDefault()
-    //Dispatch action filterChange
-    dispatch(filterChange(event.target.value))
+    //Dispatch action filterChange using directly the connected dispatch passed with action in prop
+    props.filterChange(event.target.value)
   }
   return (
     <div style={style}>
@@ -20,5 +18,11 @@ const Filter = () => {
     </div>
   )
 }
-
-export default Filter
+//MapDispatchToProps is a group of action creators functions passed
+//to the connectedFilter component  as props instead of using the useDispatch
+// hook to dispatch the actions
+const mapDispatchToProps = {
+  filterChange,
+}
+const ConnectedFilter = connect(null, mapDispatchToProps)(Filter)
+export default ConnectedFilter
