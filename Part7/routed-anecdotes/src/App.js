@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Routes, Route, Link, useParams } from 'react-router-dom'
+import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 
-const Menu = ({ anecdotes }) => {
+const Menu = ({ anecdotes, addNew }) => {
   const padding = {
     paddingRight: 5,
   }
@@ -23,7 +23,10 @@ const Menu = ({ anecdotes }) => {
           element={<Anecdote anecdotes={anecdotes} />}
         />
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
-        <Route path='/create' element={<CreateNew />} />
+        <Route
+          path='/create'
+          element={<CreateNew addNew={(anecdote) => addNew(anecdote)} />}
+        />
         <Route path='/about' element={<About />} />
       </Routes>
     </div>
@@ -96,6 +99,9 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  //React hook to change programatically the router route
+  const navigate = useNavigate()
+
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -104,6 +110,7 @@ const CreateNew = (props) => {
       info,
       votes: 0,
     })
+    navigate('/')
   }
 
   return (
@@ -181,7 +188,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu anecdotes={anecdotes} />
+      <Menu anecdotes={anecdotes} addNew={(anecdote) => addNew(anecdote)} />
 
       <Footer />
     </div>
