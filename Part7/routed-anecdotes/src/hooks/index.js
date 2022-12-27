@@ -7,11 +7,15 @@ export const useField = (type) => {
   const onChange = (event) => {
     setValue(event.target.value)
   }
+  const onReset = () => {
+    setValue('')
+  }
 
   //Retrieve all atributtes required by  input in a form
   return {
     type,
     value,
     onChange,
+    onReset,
   }
 }

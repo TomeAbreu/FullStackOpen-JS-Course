@@ -107,6 +107,13 @@ const CreateNew = (props) => {
   //React hook to change programatically the router route
   const navigate = useNavigate()
 
+  const handleOnReset = (e) => {
+    e.preventDefault()
+    content.onReset()
+    info.onReset()
+    author.onReset()
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -145,6 +152,7 @@ const CreateNew = (props) => {
           <input name='info' value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
+        <button onClick={handleOnReset}>reset</button>
       </form>
     </div>
   )
