@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
     paddingRight: 5,
   }
+  console.log('ANECDOTES LIST: ', anecdotes)
 
   return (
     <div>
@@ -39,7 +41,9 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {anecdotes.map((anecdote) => (
         <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          <Link key={anecdote.id} to={`/anecdotes/${anecdote.id}`}>
+            {anecdote.content}
+          </Link>
         </li>
       ))}
     </ul>
@@ -95,9 +99,10 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  //Inputs withs custom field Hook
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
 
   //React hook to change programatically the router route
   const navigate = useNavigate()
@@ -120,26 +125,24 @@ const CreateNew = (props) => {
         <div>
           content
           <input
+            type={content.type}
             name='content'
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={content.value}
+            onChange={content.onChange}
           />
         </div>
         <div>
           author
           <input
+            type={author.type}
             name='author'
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            value={author.value}
+            onChange={author.onChange}
           />
         </div>
         <div>
           url for more info
-          <input
-            name='info'
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
+          <input name='info' value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
       </form>
@@ -169,7 +172,14 @@ const App = () => {
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
-    setAnecdotes(anecdotes.concat(anecdote))
+    let anecdoteToAdd = {
+      content: anecdote.content.value,
+      author: anecdote.author.value,
+      info: anecdote.info.value,
+      votes: anecdote.votes,
+      id: anecdote.id,
+    }
+    setAnecdotes(anecdotes.concat(anecdoteToAdd))
   }
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
