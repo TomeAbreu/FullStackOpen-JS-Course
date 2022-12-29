@@ -1,8 +1,16 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useField } from './hooks'
-import { Table, Form, Button } from 'react-bootstrap'
-import { Container } from '@mui/material'
+import { Form, Button } from 'react-bootstrap'
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@mui/material'
 
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
@@ -56,19 +64,20 @@ const Menu = ({ anecdotes, addNew }) => {
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <Table striped>
-      <tbody>
-        {anecdotes.map((anecdote) => (
-          <tr key={anecdote.id}>
-            <td>
-              <Link key={anecdote.id} to={`/anecdotes/${anecdote.id}`}>
-                {anecdote.content}
-              </Link>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {anecdotes.map((anecdote) => (
+            <TableRow key={anecdote.id}>
+              <TableCell>
+                <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </div>
 )
 
