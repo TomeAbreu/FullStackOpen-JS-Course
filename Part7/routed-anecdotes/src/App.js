@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useField } from './hooks'
-import { Form, Button } from 'react-bootstrap'
 import {
   Container,
   Table,
@@ -10,10 +9,12 @@ import {
   TableContainer,
   TableRow,
   Paper,
+  TextField,
+  Button,
 } from '@mui/material'
-
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
@@ -22,28 +23,19 @@ const Menu = ({ anecdotes, addNew }) => {
 
   return (
     <div>
-      <Navbar bg='light' expand='lg'>
-        <Navbar.Toggle aria-controls='responsive-navbar-nav' />
-        <Navbar.Collapse id='responsive-navbar-nav'>
-          <Nav className='me-auto'>
-            <Nav.Link href='#' as='span'>
-              <Link style={padding} to='/'>
-                Anecdotes
-              </Link>
-            </Nav.Link>
-            <Nav.Link href='#' as='span'>
-              <Link style={padding} to='/create'>
-                Create
-              </Link>
-            </Nav.Link>
-            <Nav.Link href='#' as='span'>
-              <Link style={padding} to='/about'>
-                About
-              </Link>
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <AppBar position='static'>
+        <Toolbar>
+          <Button color='inherit' component={Link} to='/'>
+            Anecdotes
+          </Button>
+          <Button color='inherit' component={Link} to='/create'>
+            Create
+          </Button>
+          <Button color='inherit' component={Link} to='/about'>
+            About
+          </Button>
+        </Toolbar>
+      </AppBar>
 
       <Routes>
         <Route
@@ -159,37 +151,40 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group>
-          <Form.Label>content:</Form.Label>
-          <Form.Control
+      <form onSubmit={handleSubmit}>
+        <div>
+          <TextField
+            label='content:'
             type={content.type}
-            name='content'
             onChange={content.onChange}
             value={content.value}
-          ></Form.Control>
-          <Form.Label>author:</Form.Label>
-          <Form.Control
+          />
+        </div>
+        <div>
+          <TextField
+            label='author:'
             type={author.type}
-            name='author'
             onChange={author.onChange}
             value={author.value}
-          ></Form.Control>
-          <Form.Label>url:</Form.Label>
-          <Form.Control
+          />
+        </div>
+        <div>
+          <TextField
+            label='info:'
             type={info.type}
-            name='info'
             onChange={info.onChange}
             value={info.value}
-          ></Form.Control>
-        </Form.Group>
-        <Button variant='primary' type='submit'>
-          create
-        </Button>
-        <Button variant='secondary' onClick={handleOnReset}>
-          reset
-        </Button>
-      </Form>
+          />
+        </div>
+        <div>
+          <Button variant='contained' color='primary' type='submit'>
+            create
+          </Button>
+          <Button variant='contained' color='secondary' onClick={handleOnReset}>
+            reset
+          </Button>
+        </div>
+      </form>
     </div>
   )
 }
