@@ -8,6 +8,7 @@ const useField = (type) => {
     setValue(event.target.value)
   }
 
+  return {
     type,
     value,
     onChange,
@@ -35,7 +36,6 @@ const Country = ({ country }) => {
   if (!country) {
     return <div>not found...</div>
   }
-  console.log('Country: ', country)
 
   return (
     <div>
