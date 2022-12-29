@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useField } from './hooks'
-import Table from 'react-bootstrap/Table'
+import { Table, Form, Button } from 'react-bootstrap'
+import Container from 'react-bootstrap/Container'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
@@ -10,15 +14,29 @@ const Menu = ({ anecdotes, addNew }) => {
 
   return (
     <div>
-      <Link style={padding} to='/'>
-        anecdotes
-      </Link>
-      <Link style={padding} to='/create'>
-        create new
-      </Link>
-      <Link style={padding} to='/about'>
-        about
-      </Link>
+      <Navbar bg='light' expand='lg'>
+        <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+        <Navbar.Collapse id='responsive-navbar-nav'>
+          <Nav className='me-auto'>
+            <Nav.Link href='#' as='span'>
+              <Link style={padding} to='/'>
+                Anecdotes
+              </Link>
+            </Nav.Link>
+            <Nav.Link href='#' as='span'>
+              <Link style={padding} to='/create'>
+                Create
+              </Link>
+            </Nav.Link>
+            <Nav.Link href='#' as='span'>
+              <Link style={padding} to='/about'>
+                About
+              </Link>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+
       <Routes>
         <Route
           path='/anecdotes/:id'
@@ -132,32 +150,37 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>content:</Form.Label>
+          <Form.Control
             type={content.type}
             name='content'
-            value={content.value}
             onChange={content.onChange}
-          />
-        </div>
-        <div>
-          author
-          <input
+            value={content.value}
+          ></Form.Control>
+          <Form.Label>author:</Form.Label>
+          <Form.Control
             type={author.type}
             name='author'
-            value={author.value}
             onChange={author.onChange}
-          />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info.value} onChange={info.onChange} />
-        </div>
-        <button>create</button>
-        <button onClick={handleOnReset}>reset</button>
-      </form>
+            value={author.value}
+          ></Form.Control>
+          <Form.Label>url:</Form.Label>
+          <Form.Control
+            type={info.type}
+            name='info'
+            onChange={info.onChange}
+            value={info.value}
+          ></Form.Control>
+        </Form.Group>
+        <Button variant='primary' type='submit'>
+          create
+        </Button>
+        <Button variant='secondary' onClick={handleOnReset}>
+          reset
+        </Button>
+      </Form>
     </div>
   )
 }
@@ -179,8 +202,6 @@ const App = () => {
       id: 2,
     },
   ])
-
-  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
