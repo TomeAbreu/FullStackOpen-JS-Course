@@ -6,7 +6,6 @@ const Menu = ({ anecdotes, addNew }) => {
   const padding = {
     paddingRight: 5,
   }
-  console.log('ANECDOTES LIST: ', anecdotes)
 
   return (
     <div>
@@ -204,7 +203,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
       <h1>Software anecdotes</h1>
       <Menu anecdotes={anecdotes} addNew={(anecdote) => addNew(anecdote)} />
 
