@@ -10,6 +10,12 @@ const config = {
     path: path.resolve(__dirname, 'build'),
     filename: 'main.js',
   },
+  //Define dev server properties
+  devServer: {
+    static: path.resolve(__dirname, 'build'),
+    compress: true,
+    port: 3000,
+  },
   //Define loader to convert JSX code to JavaScript
   module: {
     rules: [
