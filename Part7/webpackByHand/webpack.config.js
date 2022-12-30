@@ -16,6 +16,8 @@ const config = {
     compress: true,
     port: 3000,
   },
+  //Add source map to fix bugs
+  devtool: 'source-map',
   //Define loader to convert JSX code to JavaScript
   module: {
     rules: [
