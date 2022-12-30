@@ -14,7 +14,14 @@ import {
 } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
+import styled from 'styled-components'
+
+//Styled component
+const FooterStyled = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`
 
 const Menu = ({ anecdotes, addNew }) => {
   const padding = {
@@ -238,7 +245,16 @@ const App = () => {
         <h1>Software anecdotes</h1>
         <Menu anecdotes={anecdotes} addNew={(anecdote) => addNew(anecdote)} />
 
-        <Footer />
+        <FooterStyled>
+          <div>
+            Anecdote app for{' '}
+            <a href='https://fullstackopen.com/'>Full Stack Open</a>. See{' '}
+            <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>
+              https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js
+            </a>{' '}
+            for the source code.
+          </div>
+        </FooterStyled>
       </div>
     </Container>
   )
