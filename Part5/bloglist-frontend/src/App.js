@@ -6,22 +6,28 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import userService from './services/users'
 import { setBlogs } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
+import { setNotificationMessage } from './reducers/notificationReducer'
+import { setErrorMessage } from './reducers/errorReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   //Use state variables
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
 
   const newBlogRef = useRef()
-  console.log('Ref', newBlogRef)
   //Get blogs from store instead of internal state
   const blogs = useSelector((state) => state.blogs)
 
-  console.log('BLOGS: ', blogs)
+  //Get user from store instead of internal state
+  const user = useSelector((state) => state.user)
+
+  //Get notification of store instead of internal state
+  const notificationMessage = useSelector((state) => state.notification)
+
+  //Get error message of store instead of internal state
+  const errorMessage = useSelector((state) => state.error)
 
   //Dispatch action hook
   const dispatch = useDispatch()
@@ -54,8 +60,8 @@ const App = () => {
     try {
       //Login user
       const user = await userService.login(userInfo)
-      //Set state user with user
-      setUser(user)
+      //Set user in store
+      dispatch(setUser(user))
       //Set user token in blogService
       blogService.setToken(user.token)
       //Save user information in local storage
@@ -64,14 +70,14 @@ const App = () => {
       setUsername('')
       setPassword('')
       //Notification messages in case of success or failure
-      setNotificationMessage(`Welcome ${username}`)
+      dispatch(setNotificationMessage(`Welcome ${username}`))
       setTimeout(() => {
-        setNotificationMessage(null)
+        dispatch(setNotificationMessage(null))
       }, 3000)
     } catch (exception) {
-      setErrorMessage('Wrong user credentials')
+      dispatch(setErrorMessage('Wrong user credentials'))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 3000)
     }
   }
@@ -80,7 +86,7 @@ const App = () => {
     //Remove user from local storage and from state
     if (user) {
       window.localStorage.removeItem('loggedBlogAppUser')
-      setUser(null)
+      dispatch(setUser(null))
     }
   }
 
@@ -101,7 +107,6 @@ const App = () => {
     const blogsWithoutDeleted = blogs.filter((blog) => {
       return blogId !== blog.id
     })
-    console.log(blogsWithoutDeleted)
     dispatch(setBlogs(blogsWithoutDeleted))
   }
 
@@ -118,17 +123,19 @@ const App = () => {
       dispatch(setBlogs(blogs.concat(newBlog)))
 
       //Add success notification
-      setNotificationMessage(
-        `A new blog ${newBlog.title} by ${newBlog.author} added`
+      dispatch(
+        setNotificationMessage(
+          `A new blog ${newBlog.title} by ${newBlog.author} added`
+        )
       )
       setTimeout(() => {
-        setNotificationMessage(null)
+        dispatch(setNotificationMessage(null))
       }, 3000)
     } catch (exception) {
       //Add notification error message in case of error creating new blog
-      setErrorMessage('Could not create a new blog')
+      dispatch(setErrorMessage('Could not create a new blog'))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 3000)
     }
   }
