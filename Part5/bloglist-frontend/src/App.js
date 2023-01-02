@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-import Member from './components/Member'
+import Blogs from './components/Blogs'
+import Members from './components/Members'
 
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
@@ -13,6 +13,8 @@ import { setMembers } from './reducers/membersReducer'
 import { setNotificationMessage } from './reducers/notificationReducer'
 import { setErrorMessage } from './reducers/errorReducer'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
   //Use state variables
@@ -85,6 +87,7 @@ const App = () => {
       setPassword('')
       //Notification messages in case of success or failure
       dispatch(setNotificationMessage(`Welcome ${username}`))
+      //Navigate to home page again
       setTimeout(() => {
         dispatch(setNotificationMessage(null))
       }, 3000)
@@ -179,28 +182,36 @@ const App = () => {
             message={notificationMessage}
             error={errorMessage}
           ></Notification>
-          <h2>blogs</h2>
-          <span>
-            {user.username} is logged in{''}
-            <button onClick={handleLogout}>Logout</button>
-          </span>
+          <div>
+            <span>
+              {user.username} is logged in{''}
+              <button onClick={handleLogout}>Logout</button>
+            </span>
+          </div>
           {/*Form to create a new blog*/}
           <Togglable buttonLabel='new blog' ref={newBlogRef}>
             <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>
           </Togglable>
-
-          {blogs
-            .filter((blog) => blog.user.username === user.username)
-            .map((blog) => (
-              <Blog key={blog.id} blog={blog} user={user} />
-            ))}
         </div>
         <div>
-          <h3>Users</h3>
-          {members.map((member) => (
-            <Member key={member.id} member={member} />
-          ))}
+          <Link to='/blogs'>Blogs</Link>
+          <Link to='/members'>Users</Link>
         </div>
+
+        <Routes>
+          <Route
+            path='/blogs'
+            element={
+              <Blogs
+                blogs={blogs.filter(
+                  (blog) => blog.user.username === user.username
+                )}
+                user={user}
+              />
+            }
+          />
+          <Route path='/members' element={<Members members={members} />} />
+        </Routes>
       </div>
     )
   }
