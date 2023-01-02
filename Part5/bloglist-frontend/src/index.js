@@ -9,11 +9,13 @@ import blogReducer from './reducers/blogReducer'
 import userReducer from './reducers/userReducer'
 import notificationReducer from './reducers/notificationReducer'
 import errorReducer from './reducers/errorReducer'
+import membersReducer from './reducers/membersReducer'
 
 const store = configureStore({
   reducer: {
     blogs: blogReducer,
     user: userReducer,
+    members: membersReducer,
     notification: notificationReducer,
     error: errorReducer,
   },

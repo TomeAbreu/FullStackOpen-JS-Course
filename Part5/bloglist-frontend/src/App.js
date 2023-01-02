@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import Member from './components/Member'
+
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
 import Togglable from './components/Togglable'
@@ -7,6 +9,7 @@ import blogService from './services/blogs'
 import userService from './services/users'
 import { setBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
+import { setMembers } from './reducers/membersReducer'
 import { setNotificationMessage } from './reducers/notificationReducer'
 import { setErrorMessage } from './reducers/errorReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,6 +25,9 @@ const App = () => {
 
   //Get user from store instead of internal state
   const user = useSelector((state) => state.user)
+
+  //Get users from store instead of internal state
+  const members = useSelector((state) => state.members)
 
   //Get notification of store instead of internal state
   const notificationMessage = useSelector((state) => state.notification)
@@ -41,17 +47,25 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
 
-      const getAllBlogs = async () => {
-        //Get all the blogs
-        let blogsData = await blogService.getAll()
-        blogsData = blogsData.slice()
-        const sortedBlogsData = blogsData.sort((a, b) => b.likes - a.likes)
-        dispatch(setBlogs(sortedBlogsData))
-      }
-
       getAllBlogs()
+      getAllUsers()
     }
   }, [])
+
+  //Get all blogs
+  const getAllBlogs = async () => {
+    //Get all the blogs
+    let blogsData = await blogService.getAll()
+    blogsData = blogsData.slice()
+    const sortedBlogsData = blogsData.sort((a, b) => b.likes - a.likes)
+    dispatch(setBlogs(sortedBlogsData))
+  }
+
+  //Get All Users
+  const getAllUsers = async () => {
+    const usersData = await userService.getAll()
+    dispatch(setMembers(usersData))
+  }
 
   //When submit login form button is clicked
   const handleLogin = async (event) => {
@@ -160,23 +174,33 @@ const App = () => {
   } else {
     return (
       <div>
-        <Notification
-          message={notificationMessage}
-          error={errorMessage}
-        ></Notification>
-        <h2>blogs</h2>
-        <h3>
-          {user.username} is logged in{''}
-          <button onClick={handleLogout}>Logout</button>
-        </h3>
-        {/*Form to create a new blog*/}
-        <Togglable buttonLabel='new blog' ref={newBlogRef}>
-          <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>
-        </Togglable>
+        <div>
+          <Notification
+            message={notificationMessage}
+            error={errorMessage}
+          ></Notification>
+          <h2>blogs</h2>
+          <span>
+            {user.username} is logged in{''}
+            <button onClick={handleLogout}>Logout</button>
+          </span>
+          {/*Form to create a new blog*/}
+          <Togglable buttonLabel='new blog' ref={newBlogRef}>
+            <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>
+          </Togglable>
 
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} />
-        ))}
+          {blogs
+            .filter((blog) => blog.user.username === user.username)
+            .map((blog) => (
+              <Blog key={blog.id} blog={blog} user={user} />
+            ))}
+        </div>
+        <div>
+          <h3>Users</h3>
+          {members.map((member) => (
+            <Member key={member.id} member={member} />
+          ))}
+        </div>
       </div>
     )
   }
