@@ -90,26 +90,6 @@ const App = () => {
     }
   }
 
-  //Function to be called back from Blog to update blog number of likes
-  const updateBlogLikes = (blogId, newLikes) => {
-    //Find blog with same id in blogs state variable
-    const blogsUpdated = blogs.map((blog) => {
-      if (blog.id === blogId) {
-        blog.likes = newLikes
-      }
-      return blog
-    })
-
-    dispatch(setBlogs(blogsUpdated))
-  }
-
-  const deleteBlog = (blogId) => {
-    const blogsWithoutDeleted = blogs.filter((blog) => {
-      return blogId !== blog.id
-    })
-    dispatch(setBlogs(blogsWithoutDeleted))
-  }
-
   //Function to handle creation of new blog
   const handleNewBlog = async (blog) => {
     //Access to visibility function to hide form in Toggable component
@@ -195,13 +175,7 @@ const App = () => {
         </Togglable>
 
         {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlogLikesCallBack={updateBlogLikes}
-            deleteBlogCallBack={deleteBlog}
-            user={user}
-          />
+          <Blog key={blog.id} blog={blog} user={user} />
         ))}
       </div>
     )

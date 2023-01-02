@@ -1,8 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 import blogService from '../services/blogs'
+import { setErrorMessage } from '../reducers/errorReducer'
+import { increaseBlogLike, deleteBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
+const Blog = ({ blog, user }) => {
+  //Dispatch hook
+  const dispatch = useDispatch()
+
   const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
 
   const toggleBlogDetails = () => {
@@ -10,8 +16,6 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
   }
 
   const handleIncreaseLike = async () => {
-    blog.likes = blog.likes + 1
-
     //Make put request to update blog
     try {
       const blogToBeUpdated = {
@@ -19,12 +23,13 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
         author: blog.author,
         url: blog.url,
         title: blog.title,
-        likes: blog.likes,
+        likes: blog.likes + 1,
       }
       const blogUpdated = await blogService.updateBlog(blogToBeUpdated)
-      updateBlogLikesCallBack(blog.id, blogUpdated.likes)
+      dispatch(increaseBlogLike(blogUpdated))
     } catch (error) {
-      console.log('Error updating blog')
+      console.log('ERROR: ', error)
+      dispatch(setErrorMessage('Could not update blog'))
     }
   }
 
@@ -36,9 +41,9 @@ const Blog = ({ blog, updateBlogLikesCallBack, deleteBlogCallBack, user }) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
         await blogService.deleteBlog(blog.id)
-        deleteBlogCallBack(blog.id)
+        dispatch(deleteBlog(blog))
       } catch (error) {
-        console.log('Error removing blog')
+        dispatch(setErrorMessage('Could not update blog'))
       }
     }
   }
