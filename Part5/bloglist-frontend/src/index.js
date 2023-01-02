@@ -6,8 +6,14 @@ import { configureStore } from 'redux'
 import { Provider } from 'react-redux'
 
 import blogReducer from './reducers/blogReducer'
+import userReducer from './reducers/userReducer'
 
-const store = configureStore(blogReducer)
+const store = configureStore({
+  reducer: {
+    blogs: blogReducer,
+    user: userReducer,
+  },
+})
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
