@@ -1,6 +1,22 @@
-const blogReducer = (state = [], action) => {
-  console.log('Action: ', action)
-  return state
-}
+import { createSlice } from '@reduxjs/toolkit'
 
-export default blogReducer
+const initialState = []
+
+const blogSlice = createSlice({
+  name: 'blogs',
+  initialState: initialState,
+  reducers: {
+    //Add blog to state
+    appendBlog(state, action) {
+      state.push(action.payload)
+    },
+    //Set blogs
+    setBlogs(state, action) {
+      return action.payload
+    },
+  },
+})
+
+export const { appendBlog, setBlogs } = blogSlice.actions
+
+export default blogSlice.reducer

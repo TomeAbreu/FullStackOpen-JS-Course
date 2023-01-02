@@ -5,10 +5,11 @@ import NewBlogForm from './components/NewBlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import userService from './services/users'
+import { setBlogs } from './reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   //Use state variables
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -16,6 +17,14 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   const newBlogRef = useRef()
+  console.log('Ref', newBlogRef)
+  //Get blogs from store instead of internal state
+  const blogs = useSelector((state) => state.blogs)
+
+  console.log('BLOGS: ', blogs)
+
+  //Dispatch action hook
+  const dispatch = useDispatch()
 
   //Use Effect only run when state is empty array(initial rendering):
   //Check if user is logged in in local storage and set state user variable and save token in blogService
@@ -28,10 +37,12 @@ const App = () => {
 
       const getAllBlogs = async () => {
         //Get all the blogs
-        const blogsData = await blogService.getAll()
-
-        setBlogs(blogsData.sort((a, b) => b.likes - a.likes))
+        let blogsData = await blogService.getAll()
+        blogsData = blogsData.slice()
+        const sortedBlogsData = blogsData.sort((a, b) => b.likes - a.likes)
+        dispatch(setBlogs(sortedBlogsData))
       }
+
       getAllBlogs()
     }
   }, [])
@@ -83,7 +94,7 @@ const App = () => {
       return blog
     })
 
-    setBlogs(blogsUpdated)
+    dispatch(setBlogs(blogsUpdated))
   }
 
   const deleteBlog = (blogId) => {
@@ -91,7 +102,7 @@ const App = () => {
       return blogId !== blog.id
     })
     console.log(blogsWithoutDeleted)
-    setBlogs(blogsWithoutDeleted)
+    dispatch(setBlogs(blogsWithoutDeleted))
   }
 
   //Function to handle creation of new blog
@@ -104,7 +115,7 @@ const App = () => {
       const newBlog = await blogService.addBlog(blog)
 
       //set state variables
-      setBlogs(blogs.concat(newBlog))
+      dispatch(setBlogs(blogs.concat(newBlog)))
 
       //Add success notification
       setNotificationMessage(
@@ -176,17 +187,15 @@ const App = () => {
           <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>
         </Togglable>
 
-        {blogs
-          .sort((a, b) => b.likes - a.likes)
-          .map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlogLikesCallBack={updateBlogLikes}
-              deleteBlogCallBack={deleteBlog}
-              user={user}
-            />
-          ))}
+        {blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlogLikesCallBack={updateBlogLikes}
+            deleteBlogCallBack={deleteBlog}
+            user={user}
+          />
+        ))}
       </div>
     )
   }
