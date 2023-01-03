@@ -1,5 +1,5 @@
 import React from 'react'
-import Member from './Member'
+import { Link } from 'react-router-dom'
 
 const Members = ({ members }) => {
   return (
@@ -8,9 +8,7 @@ const Members = ({ members }) => {
       <ul>
         {members.map((member) => (
           <li key={member.id}>
-            <Member key={member.id} member={member}>
-              {' '}
-            </Member>
+            <Link to={`/users/${member.id}`}>{member.name}</Link>
           </li>
         ))}
       </ul>

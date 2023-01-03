@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import Members from './components/Members'
+import Member from './components/Member'
 
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
@@ -195,7 +196,7 @@ const App = () => {
         </div>
         <div>
           <Link to='/blogs'>Blogs</Link>
-          <Link to='/members'>Users</Link>
+          <Link to='/users'>Users</Link>
         </div>
 
         <Routes>
@@ -210,7 +211,8 @@ const App = () => {
               />
             }
           />
-          <Route path='/members' element={<Members members={members} />} />
+          <Route path='/users' element={<Members members={members} />} />
+          <Route path='/users/:id' element={<Member members={members} />} />
         </Routes>
       </div>
     )
