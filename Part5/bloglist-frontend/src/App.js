@@ -20,6 +20,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
+  //Padding style
+  const padding = {
+    padding: 5,
+  }
+
   //Use state variables
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -186,19 +191,25 @@ const App = () => {
             error={errorMessage}
           ></Notification>
           <div>
-            <span>
+            <Link to='/blogs' style={padding}>
+              Blogs
+            </Link>
+            <Link to='/users' style={padding}>
+              Users
+            </Link>
+
+            <span style={padding}>
               {user.username} is logged in{''}
               <button onClick={handleLogout}>Logout</button>
             </span>
           </div>
-          {/*Form to create a new blog*/}
-          <Togglable buttonLabel='new blog' ref={newBlogRef}>
-            <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>
-          </Togglable>
-        </div>
-        <div>
-          <Link to='/blogs'>Blogs</Link>
-          <Link to='/users'>Users</Link>
+          <h3>Blog App</h3>
+          <div>
+            {/*Form to create a new blog*/}
+            <Togglable buttonLabel='new blog' ref={newBlogRef}>
+              <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>
+            </Togglable>
+          </div>
         </div>
 
         <Routes>
