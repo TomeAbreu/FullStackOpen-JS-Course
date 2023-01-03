@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
+
 import Members from './components/Members'
 import Member from './components/Member'
 
@@ -200,19 +202,10 @@ const App = () => {
         </div>
 
         <Routes>
-          <Route
-            path='/blogs'
-            element={
-              <Blogs
-                blogs={blogs.filter(
-                  (blog) => blog.user.username === user.username
-                )}
-                user={user}
-              />
-            }
-          />
+          <Route path='/blogs' element={<Blogs blogs={blogs} />} />
           <Route path='/users' element={<Members members={members} />} />
           <Route path='/users/:id' element={<Member members={members} />} />
+          <Route path='/blogs/:id' element={<Blog blogs={blogs} />} />
         </Routes>
       </div>
     )
