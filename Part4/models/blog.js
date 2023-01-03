@@ -12,6 +12,13 @@ const blogSchema = new mongoose.Schema({
     required: false,
     default: 0,
   },
+  //Adding reference to comment document
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
   //Adding reference to user document
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
