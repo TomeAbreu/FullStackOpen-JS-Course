@@ -34,7 +34,7 @@ const CommentForm = () => {
       {' '}
       <form onSubmit={handleNewCommentSubmit}>
         <div>
-          content:{' '}
+          comment:{' '}
           <input onChange={changeContentEvent} value={commentContent} />
         </div>
 

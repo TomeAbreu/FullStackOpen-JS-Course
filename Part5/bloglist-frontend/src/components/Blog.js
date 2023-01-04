@@ -6,6 +6,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import CommentForm from './CommentForm'
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@mui/material'
+
 const Blog = ({ blogs }) => {
   //Dispatch hook
   const dispatch = useDispatch()
@@ -64,11 +73,17 @@ const Blog = ({ blogs }) => {
         <div>
           <h4>Comments: </h4>
           <CommentForm></CommentForm>
-          <ul>
-            {blog.comments.map((comment) => (
-              <li key={comment.id}>{comment.content}</li>
-            ))}
-          </ul>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableBody>
+                {blog.comments.map((comment) => (
+                  <TableRow key={comment.id}>
+                    <TableCell>{comment.content}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </div>
     </div>
