@@ -4,6 +4,7 @@ import Blog from './components/Blog'
 
 import Members from './components/Members'
 import Member from './components/Member'
+import AppMenu from './components/AppMenu'
 
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
@@ -20,11 +21,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
-  //Padding style
-  const padding = {
-    padding: 5,
-  }
-
   //Use state variables
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -185,20 +181,17 @@ const App = () => {
   } else {
     return (
       <div>
+        <AppMenu></AppMenu>
         <div>
           <Notification
             message={notificationMessage}
             error={errorMessage}
           ></Notification>
           <div>
-            <Link to='/blogs' style={padding}>
-              Blogs
-            </Link>
-            <Link to='/users' style={padding}>
-              Users
-            </Link>
+            <Link to='/blogs'>Blogs</Link>
+            <Link to='/users'>Users</Link>
 
-            <span style={padding}>
+            <span>
               {user.username} is logged in{''}
               <button onClick={handleLogout}>Logout</button>
             </span>
