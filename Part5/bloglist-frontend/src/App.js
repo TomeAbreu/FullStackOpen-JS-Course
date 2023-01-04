@@ -18,7 +18,7 @@ import { setNotificationMessage } from './reducers/notificationReducer'
 import { setErrorMessage } from './reducers/errorReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 const App = () => {
   //Use state variables
@@ -181,22 +181,18 @@ const App = () => {
   } else {
     return (
       <div>
-        <AppMenu></AppMenu>
+        <AppMenu logoutCallback={handleLogout}></AppMenu>
         <div>
           <Notification
             message={notificationMessage}
             error={errorMessage}
           ></Notification>
           <div>
-            <Link to='/blogs'>Blogs</Link>
-            <Link to='/users'>Users</Link>
-
             <span>
               {user.username} is logged in{''}
-              <button onClick={handleLogout}>Logout</button>
             </span>
           </div>
-          <h3>Blog App</h3>
+
           <div>
             {/*Form to create a new blog*/}
             <Togglable buttonLabel='new blog' ref={newBlogRef}>

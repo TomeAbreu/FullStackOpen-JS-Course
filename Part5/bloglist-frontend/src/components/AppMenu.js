@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 const pages = ['Blogs', 'Users']
 const settings = ['Logout']
 
-const AppMenu = () => {
+const AppMenu = ({ logoutCallback }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
@@ -37,8 +37,7 @@ const AppMenu = () => {
   }
 
   const handleCloseUserMenu = (event) => {
-    console.log('HANDLE CLOSE SER  MENU: ', event.currentTarget)
-    setAnchorElUser(null)
+    if (event.target.textContent === 'Logout') logoutCallback()
   }
 
   return (
