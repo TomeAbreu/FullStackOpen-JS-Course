@@ -167,12 +167,6 @@ const App = () => {
             error={errorMessage}
           ></Notification>
           <div>
-            <span>
-              {user.username} is logged in{''}
-            </span>
-          </div>
-
-          <div>
             {/*Form to create a new blog*/}
             <Togglable buttonLabel='new blog' ref={newBlogRef}>
               <NewBlogForm handleNewBlog={handleNewBlog}></NewBlogForm>

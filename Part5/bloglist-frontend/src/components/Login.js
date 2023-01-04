@@ -7,7 +7,7 @@ import { green } from '@mui/material/colors'
 const Login = ({ loginCallback, setUsername, setPassword }) => {
   const paperStyle = {
     padding: '20px',
-    height: '100vh',
+    height: '50vh',
     width: '300px',
     margin: '20px auto',
   }
