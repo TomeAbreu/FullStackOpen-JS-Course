@@ -4,6 +4,7 @@ import { setErrorMessage } from '../reducers/errorReducer'
 import { increaseBlogLike, deleteBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import CommentForm from './CommentForm'
 
 const Blog = ({ blogs }) => {
   //Dispatch hook
@@ -60,6 +61,15 @@ const Blog = ({ blogs }) => {
           <button onClick={handleIncreaseLike}>like</button>
         </div>
         {user.username === blog.user.username && showDeleteButton()}
+        <div>
+          <h4>Comments: </h4>
+          <CommentForm></CommentForm>
+          <ul>
+            {blog.comments.map((comment) => (
+              <li key={comment.id}>{comment.content}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   )

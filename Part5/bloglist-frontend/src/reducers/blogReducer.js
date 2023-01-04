@@ -26,10 +26,23 @@ const blogSlice = createSlice({
 
       return state.filter((blog) => blog.id !== blogToDelete.id)
     },
+    //Add comment to blog
+    addCommentToBlog(state, action) {
+      const blogWithAddedComment = action.payload
+
+      return state.map((blog) =>
+        blog.id === blogWithAddedComment.id ? blogWithAddedComment : blog
+      )
+    },
   },
 })
 
-export const { appendBlog, setBlogs, increaseBlogLike, deleteBlog } =
-  blogSlice.actions
+export const {
+  appendBlog,
+  setBlogs,
+  increaseBlogLike,
+  deleteBlog,
+  addCommentToBlog,
+} = blogSlice.actions
 
 export default blogSlice.reducer

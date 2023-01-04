@@ -16,6 +16,18 @@ const addBlog = async (blog) => {
   return response.data
 }
 
+const addComment = async (blogContent, blogId) => {
+  //Add token to request header
+  const config = { headers: { Authorization: token } }
+
+  const response = await axios.post(
+    baseUrl + `/${blogId}` + '/comments',
+    blogContent,
+    config
+  )
+  return response.data
+}
+
 const updateBlog = async (blog) => {
   const response = await axios.put(baseUrl + `/${blog.id}`, blog)
   return response.data
@@ -31,4 +43,4 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
-export default { getAll, addBlog, updateBlog, deleteBlog, setToken }
+export default { getAll, addBlog, updateBlog, deleteBlog, setToken, addComment }

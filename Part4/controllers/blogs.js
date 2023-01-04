@@ -13,13 +13,15 @@ const { info } = require('../utils/logger')
 
 //Controller to get all blogs
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({})
+    .populate('comments')
+    .populate('user', { username: 1, name: 1 })
   return response.json(blogs)
 })
 
 //Controller to get blog by Id
 blogsRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
+  const blog = await Blog.findById(request.params.id).populate('comments')
   if (blog) {
     response.json(blog)
   } else {
