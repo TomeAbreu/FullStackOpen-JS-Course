@@ -5,6 +5,7 @@ import Blog from './components/Blog'
 import Members from './components/Members'
 import Member from './components/Member'
 import AppMenu from './components/AppMenu'
+import Login from './components/Login'
 
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
@@ -144,38 +145,16 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <h2>Log in to application</h2>
+        <Login
+          loginCallback={handleLogin}
+          setUsername={setUsername}
+          setPassword={setPassword}
+        ></Login>
+
         <Notification
           message={notificationMessage}
           error={errorMessage}
         ></Notification>
-        <form onSubmit={handleLogin}>
-          <div>
-            {' '}
-            username
-            <input
-              type='text'
-              value={username}
-              name='Username'
-              id='username'
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            {' '}
-            password{' '}
-            <input
-              type='password'
-              value={password}
-              name='Password'
-              id='password'
-              onChange={({ target }) => setPassword(target.value)}
-            />{' '}
-          </div>{' '}
-          <button id='login-button' type='submit'>
-            login
-          </button>{' '}
-        </form>
       </div>
     )
   } else {

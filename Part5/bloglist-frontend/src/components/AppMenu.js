@@ -22,21 +22,18 @@ const AppMenu = ({ logoutCallback }) => {
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
   const handleOpenNavMenu = (event) => {
-    console.log('HANDLE OPEN NAV MENU: ', event.currentTarget)
-
     setAnchorElNav(event.currentTarget)
   }
   const handleOpenUserMenu = (event) => {
-    console.log('HANDLE OPEN USER MENU: ', event.currentTarget)
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseNavMenu = (event) => {
-    console.log('HANDLE CLOSE NAV MENU: ', event.currentTarget)
+  const handleCloseNavMenu = () => {
     setAnchorElNav(null)
   }
 
   const handleCloseUserMenu = (event) => {
+    //Logout
     if (event.target.textContent === 'Logout') logoutCallback()
   }
 
@@ -133,7 +130,7 @@ const AppMenu = ({ logoutCallback }) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                <Avatar alt='User Avatar' />
               </IconButton>
             </Tooltip>
             <Menu
