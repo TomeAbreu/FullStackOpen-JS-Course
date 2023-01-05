@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    //Tell compiler that does not require to have types for all variables used
     "noImplicitAny": false
   }
 }
