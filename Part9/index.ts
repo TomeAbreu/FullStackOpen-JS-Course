@@ -1,1 +1,5 @@
-console.log('OLA')
+const multiplicator = (a: number, b: number, printText) => {
+  console.log(printText, a * b)
+}
+
+multiplicator(3, 4, 'Multiplied a string and 4, the result is:')
