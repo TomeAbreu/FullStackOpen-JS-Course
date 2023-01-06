@@ -19,11 +19,10 @@ const parse1Arguments = (args: Array<string>): BMIValues => {
   }
 }
 
-const bmiCalculator = (height: number, weight: number): void => {
+export const bmiCalculator = (height: number, weight: number): string => {
   let alt = height * 0.01 * (height * 0.01)
 
   const result: number = weight / alt
-  console.log(result)
   let textResult: string
 
   if (result < 18.4) {
@@ -35,7 +34,7 @@ const bmiCalculator = (height: number, weight: number): void => {
   } else {
     textResult = 'Obese'
   }
-  console.log(textResult)
+  return textResult
 }
 
 try {
@@ -49,3 +48,5 @@ try {
   }
   console.log(errorMessage)
 }
+
+export default { bmiCalculator }
