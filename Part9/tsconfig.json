@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
-    //Tell compiler that does not require to have types for all variables used
-    "noImplicitAny": true
+    "target": "ES2020",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   }
 }

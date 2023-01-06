@@ -87,7 +87,7 @@ try {
   console.log('VALUE1: ', value1)
   console.log('VALUE2: ', value2)
   console.log(calculateExercises(value1, value2))
-} catch (error) {
+} catch (error: any) {
   let errorMessage = 'Something bad happened. ' + error.message
 
   console.log(errorMessage)
