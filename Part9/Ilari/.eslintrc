@@ -24,5 +24,8 @@
     "no-case-declarations": "off"
   },
   "parser": "@typescript-eslint/parser",
-  "parserOptions": { "project": "./Part9/Ilari/tsconfig.json" }
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "rootDir": "../Ilari"
+  }
 }
