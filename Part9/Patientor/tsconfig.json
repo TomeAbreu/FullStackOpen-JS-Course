@@ -1,23 +1,28 @@
 {
   "compilerOptions": {
-    //Wich ESMAScript versio to use generating JavaScript
-    "target": "ES6",
-    //Where the compiled code will be stored in
-    "outDir": "./build/",
-    //Tell the compiler that we want to use commonjs modules in the compiled code wich means
-    //we can use the older require syntax instead of the import syntax
-    "module": "commonjs",
-    //It prevents implicity setting type any
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    //It prevents hsaving unused local variables
-    "noUnusedLocals": true,
-    //Throw an error if a function has unused parameters
-    "noUnusedParameters": true,
-    //Ensure that all functions have return values
-    "noImplicitReturns": true,
-    //Ensure that in a switch case each case ends with a return value or a break
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "downlevelIteration": true,
+    "allowJs": true,
     "noFallthroughCasesInSwitch": true,
-    //Allows interoperability between CommonJS and ES Modules
-    "esModuleInterop": true
-  }
+    "useUnknownInCatchVariables": false
+  },
+  "include": [
+    "src"
+  ]
 }
