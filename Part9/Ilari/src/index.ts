@@ -14,7 +14,7 @@ app.get('/ping', (_req, res) => {
   res.send('pong');
 });
 
-//App to use Middleware dairyRouter that has dairies routes
+//Route all requests to prefix /api/diaries to that specific router
 app.use('/api/diaries', diaryRouter);
 
 app.listen(PORT, () => {
