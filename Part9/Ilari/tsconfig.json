@@ -18,6 +18,8 @@
     //Ensure that in a switch case each case ends with a return value or a break
     "noFallthroughCasesInSwitch": true,
     //Allows interoperability between CommonJS and ES Modules
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    //Fix vscode bug for importing modules
+    "resolveJsonModule": true
   }
 }
