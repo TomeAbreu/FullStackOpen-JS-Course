@@ -1,6 +1,7 @@
 import { Patient, Gender } from '../src/types';
+import toNewPatient from '../src/utils';
 
-const patientsEntries: Array<Patient> = [
+const data = [
   {
     id: 'd2773336-f723-11e9-8f0b-362b9e155667',
     name: 'John McClane',
@@ -42,5 +43,13 @@ const patientsEntries: Array<Patient> = [
     occupation: 'Digital evangelist',
   },
 ];
+
+//We can fix this by mapping the initial data elements to Patient type with the toNewPatient
+// function: note that the function returns NewPatient and we need to case as Patient
+const patientsEntries: Patient[] = data.map((obj) => {
+  const object = toNewPatient(obj) as Patient;
+  object.id = obj.id;
+  return object;
+});
 
 export default patientsEntries;

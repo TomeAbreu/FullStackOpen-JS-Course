@@ -20,6 +20,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const newDiaryEntry = toNewDiaryEntry(req.body);
 
     const addedEntry = diaryService.addDiary(newDiaryEntry);
