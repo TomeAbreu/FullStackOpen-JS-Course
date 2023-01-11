@@ -10,6 +10,7 @@ router.get('/', (_req, res) => {
 
 router.post('/', (req, res) => {
   //Get request body and parse it to toNewDiaryEntry type
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const newPatient = toNewPatient(req.body);
 
   //Add Patient
