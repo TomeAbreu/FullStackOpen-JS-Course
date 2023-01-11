@@ -1,24 +1,18 @@
 import React from 'react';
+import { CoursePart } from '../types';
 import Part from './Part';
 
-export interface IPart {
-  name: string;
-  exerciseCount: number;
-}
 interface ContentProps {
-  courseParts: Array<IPart>;
+  courseParts: CoursePart[];
 }
+
 const Content = (props: ContentProps) => {
   return (
     <div>
       <ul>
         {props.courseParts.map((part, index) => (
           <li key={index}>
-            <Part
-              key={index}
-              name={part.name}
-              exerciseCount={part.exerciseCount}
-            ></Part>
+            <Part key={index} part={part}></Part>
           </li>
         ))}
       </ul>
