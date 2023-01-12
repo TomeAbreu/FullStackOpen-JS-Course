@@ -11,10 +11,10 @@ import { useStateValue } from '../state';
 import { TableCell } from '@material-ui/core';
 import { TableRow } from '@material-ui/core';
 import { TableBody } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
-  console.log(patients);
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
@@ -66,7 +66,10 @@ const PatientListPage = () => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
+              <TableCell>
+                {' '}
+                <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
+              </TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
