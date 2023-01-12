@@ -16,7 +16,7 @@ app.use(express.json());
 app.use('/api/patients', patientRouter);
 app.use('/api/diagnoses', diagnoseRouter);
 
-const PORT = 3000;
+const PORT = 3001;
 
 app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here');
