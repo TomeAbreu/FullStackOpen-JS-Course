@@ -5,6 +5,9 @@ import { apiBaseUrl } from '../constants';
 import { useStateValue } from '../state';
 import { Patient } from '../types';
 import { Card, CardContent, Typography } from '@material-ui/core';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import TransgenderIcon from '@mui/icons-material/Transgender';
 
 const PatientInfoPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -47,9 +50,18 @@ const PatientInfoPage = () => {
       <div>
         <Card>
           <CardContent>
-            <Typography variant='h5'>{patient.name}</Typography>
+            <Typography variant='h5'>
+              {patient.name}{' '}
+              {patient.gender === 'male' ? (
+                <MaleIcon></MaleIcon>
+              ) : patient.gender === 'female' ? (
+                <FemaleIcon></FemaleIcon>
+              ) : (
+                <TransgenderIcon></TransgenderIcon>
+              )}
+            </Typography>
             <Typography>Occupation: {patient.occupation}</Typography>
-            <Typography>Gender: {patient.gender}</Typography>
+
             {patient.ssn && <Typography>SSN: {patient.ssn}</Typography>}
             {patient.dateOfBirth && (
               <Typography>DOB: {patient.dateOfBirth}</Typography>

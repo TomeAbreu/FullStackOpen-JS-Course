@@ -1,4 +1,4 @@
-import { PatientPostReqBody, NewPatientEntry, Gender } from './types';
+import { PatientPostReqBody, NewPatientEntry, Gender, Entry } from './types';
 
 const toNewPatient = ({
   name,
@@ -6,6 +6,7 @@ const toNewPatient = ({
   ssn,
   gender,
   occupation,
+  entries,
 }: PatientPostReqBody): NewPatientEntry => {
   const newPatient: NewPatientEntry = {
     name: parseName(name),
@@ -13,6 +14,7 @@ const toNewPatient = ({
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
+    entries: parseEntries(entries),
   };
 
   return newPatient;
@@ -77,6 +79,13 @@ const parseOccupation = (occupation: unknown): string => {
     throw new Error('Invalid or missing occupation');
   }
   return occupation;
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+  if (!Array.isArray(entries)) {
+    throw new Error('Invalid entries');
+  }
+  return entries.map((entry) => entry as Entry);
 };
 
 export default toNewPatient;

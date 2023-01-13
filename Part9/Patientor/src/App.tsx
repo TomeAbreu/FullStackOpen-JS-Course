@@ -21,7 +21,6 @@ const App = () => {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
         );
-        console.log('LIST: ', patientListFromApi);
         dispatch({ type: 'SET_PATIENT_LIST', payload: patientListFromApi });
       } catch (e) {
         console.error(e);

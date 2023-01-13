@@ -39,4 +39,5 @@ export type PatientPostReqBody = {
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
+  entries: unknown;
 };
