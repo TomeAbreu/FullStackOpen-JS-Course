@@ -24,9 +24,6 @@ const getPatient = (patientId: string): Patient | undefined => {
   const patient: Patient | undefined = patientData.find(
     (patient) => patient.id === patientId
   );
-  if (patient) {
-    patient.entries = [];
-  }
   return patient;
 };
 
