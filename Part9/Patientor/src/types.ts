@@ -50,6 +50,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 export type Entry =
+  | BaseEntry
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
