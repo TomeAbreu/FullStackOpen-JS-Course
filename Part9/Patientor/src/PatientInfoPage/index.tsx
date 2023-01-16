@@ -66,6 +66,18 @@ const PatientInfoPage = () => {
             {patient.dateOfBirth && (
               <Typography>DOB: {patient.dateOfBirth}</Typography>
             )}
+            <p></p>
+            <Typography variant='h6'>Entries</Typography>
+            {patient.entries.map((entry) => (
+              <div key={entry.id}>
+                <Typography key={entry.id}>{entry.description}</Typography>
+                <ul>
+                  {entry.diagnosisCodes?.map((diagnostic) => (
+                    <li key={diagnostic}>{diagnostic}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </CardContent>
         </Card>
       </div>
