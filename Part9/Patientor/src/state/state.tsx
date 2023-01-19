@@ -25,7 +25,6 @@ type StateProviderProps = {
 
 export const StateProvider = ({ reducer, children }: StateProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('STATE: ', state);
   return (
     <StateContext.Provider value={[state, dispatch]}>
       {children}

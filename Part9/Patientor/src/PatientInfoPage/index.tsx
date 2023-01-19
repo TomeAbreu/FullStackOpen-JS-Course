@@ -8,6 +8,7 @@ import { Card, CardContent, Typography } from '@material-ui/core';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import TransgenderIcon from '@mui/icons-material/Transgender';
+import Entrys from '../components/Entrys';
 
 const PatientInfoPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -24,7 +25,6 @@ const PatientInfoPage = () => {
   const buildDiagnosesDescriptions = (diagnoses: Array<Diagnosis>) => {
     if (patient) {
       const patienEntries = patient.entries;
-      console.log('Patient Entries: ', patienEntries);
       patienEntries.map((entry) => {
         if (entry.diagnosisCodes)
           entry.diagnosisCodes.map((code) => {
@@ -32,7 +32,6 @@ const PatientInfoPage = () => {
             const diagnosesListCodes = diagnoses.filter(
               (diagnose) => diagnose.code === code
             );
-            console.log(diagnosesListCodes);
             diagnCodes.push({
               code: diagnosesListCodes[0].code,
               name: diagnosesListCodes[0].name,
@@ -44,7 +43,6 @@ const PatientInfoPage = () => {
 
   void buildDiagnosesDescriptions(diagnoses);
 
-  console.log('CODES: ', diagnCodes);
   React.useEffect(() => {
     //Function to get Patient from the backend
     const fetchPatient = async (patientId: string) => {
@@ -96,21 +94,7 @@ const PatientInfoPage = () => {
             <p></p>
 
             {patient.entries.length > 0 ? (
-              <div>
-                <Typography variant='h6'>Entries</Typography>
-                {patient.entries.map((entry) => (
-                  <div key={entry.id}>
-                    <Typography key={entry.id}>{entry.description}</Typography>
-                    <ul>
-                      {diagnCodes.map((diagn) => (
-                        <li key={diagn.code}>
-                          {diagn.code} {diagn.name}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+              <Entrys entries={patient.entries} diagnoses={diagnCodes}></Entrys>
             ) : (
               <></>
             )}

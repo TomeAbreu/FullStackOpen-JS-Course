@@ -36,11 +36,11 @@ interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
   employerName: 'HyPD';
   discharge: Discharge;
+  sickLeave: SickLeave;
 }
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
-  sickLeave: SickLeave;
 }
 
 export type Entry =
