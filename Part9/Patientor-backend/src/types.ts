@@ -10,12 +10,12 @@ export enum HealthCheckRating {
   'CriticalRisk' = 3,
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
-  endData: string;
+  endDate: string;
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
@@ -27,18 +27,18 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose['code']>;
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
+  employerName?: string;
 }
 
-interface HospitalEntry extends BaseEntry {
+export interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
-  employerName: 'HyPD';
   discharge: Discharge;
-  sickLeave: SickLeave;
+  sickLeave?: SickLeave;
 }
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
 }
@@ -73,6 +73,9 @@ export type NonSensitivePatient = Omit<Patient, 'ssn'>;
 //Type that ommits id when adding a Patient
 export type NewPatientEntry = Omit<Patient, 'id'>;
 
+//Type that ommits id when adding a Entry
+export type NewEntry = Omit<Entry, 'id'>;
+
 // Define special omit for unions
 //type UnionOmit<T, K extends string | number | symbol> = T extends unknown
 // ? Omit<T, K>
@@ -89,3 +92,33 @@ export type PatientPostReqBody = {
   occupation: unknown;
   entries: unknown;
 };
+
+interface EntryBasePostReqBody {
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes?: unknown;
+}
+
+export type EntryPostReqBody =
+  | OccupationalHealthcareEntryPostReqBody
+  | HospitalEntryPostReqBody
+  | HealthCheckEntryPostReqBody;
+
+export interface OccupationalHealthcareEntryPostReqBody
+  extends EntryBasePostReqBody {
+  type: unknown;
+  employerName: unknown;
+}
+
+export interface HospitalEntryPostReqBody extends EntryBasePostReqBody {
+  type: unknown;
+  discharge: unknown;
+  sickLeave?: unknown;
+}
+
+export interface HealthCheckEntryPostReqBody extends EntryBasePostReqBody {
+  type: unknown;
+  healthCheckRating: unknown;
+  employerName?: unknown;
+}

@@ -1,6 +1,20 @@
-import { PatientPostReqBody, NewPatientEntry, Gender, Entry } from './types';
+import {
+  PatientPostReqBody,
+  NewPatientEntry,
+  Gender,
+  Entry,
+  Diagnose,
+  NewEntry,
+  EntryPostReqBody,
+  Discharge,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+  HealthCheckEntry,
+  SickLeave,
+  HealthCheckRating,
+} from './types';
 
-const toNewPatient = ({
+export const toNewPatient = ({
   name,
   dateOfBirth,
   ssn,
@@ -10,7 +24,7 @@ const toNewPatient = ({
 }: PatientPostReqBody): NewPatientEntry => {
   const newPatient: NewPatientEntry = {
     name: parseName(name),
-    dateOfBirth: parseDateOfBirth(dateOfBirth),
+    dateOfBirth: parseDate(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
@@ -18,6 +32,175 @@ const toNewPatient = ({
   };
 
   return newPatient;
+};
+
+export const toNewEntry = (entry: EntryPostReqBody): NewEntry => {
+  console.log('OLA1');
+
+  if (isHospitalEntry(entry)) {
+    console.log('IS HOSPITAL LETS PARSE IT');
+    return {
+      description: parseDescription(entry.description),
+      date: parseDate(entry.date),
+      specialist: parseSpecialist(entry.specialist),
+      diagnosisCodes: entry.diagnosisCodes
+        ? parseDiagnoses(entry.diagnosisCodes)
+        : null,
+      type: parseType(entry.type),
+      discharge: parseDischarge(entry.discharge),
+      sickLeave: entry.sickLeave ? parseSickLeave(entry.sickLeave) : null,
+    } as HospitalEntry;
+  } else if (isOccupationalHealthcareEntry(entry)) {
+    console.log('OLA OCCUPATIONAL');
+    return {
+      description: parseDescription(entry.description),
+      date: parseDate(entry.date),
+      specialist: parseSpecialist(entry.specialist),
+      diagnosisCodes: entry.diagnosisCodes
+        ? parseDiagnoses(entry.diagnosisCodes)
+        : null,
+      type: parseType(entry.type),
+      employerName: parseEmployerName(entry.employerName),
+    } as OccupationalHealthcareEntry;
+  } else if (isHealthCheckEntry(entry)) {
+    console.log('OLA HEALTHCHECK');
+
+    return {
+      description: parseDescription(entry.description),
+      date: parseDate(entry.date),
+      specialist: parseSpecialist(entry.specialist),
+      diagnosisCodes: entry.diagnosisCodes
+        ? parseDiagnoses(entry.diagnosisCodes)
+        : null,
+      type: parseType(entry.type),
+      healthCheckRating: parseHealthCheckRating(entry.healthCheckRating),
+      employerName: entry.employerName
+        ? parseEmployerName(entry.employerName)
+        : null,
+    } as HealthCheckEntry;
+  } else {
+    throw new Error('No valid entry type');
+  }
+};
+
+const isHospitalEntry = (entry: unknown): entry is HospitalEntry => {
+  console.log('Hospital Entry: ', entry);
+  return (entry as HospitalEntry).discharge !== undefined;
+};
+
+const isOccupationalHealthcareEntry = (
+  entry: unknown
+): entry is OccupationalHealthcareEntry => {
+  return (entry as OccupationalHealthcareEntry).employerName !== undefined;
+};
+
+const isHealthCheckEntry = (entry: unknown): entry is HealthCheckEntry => {
+  return (entry as HealthCheckEntry).healthCheckRating !== undefined;
+};
+
+const parseHealthCheckRating = (
+  healthCheckRating: unknown
+): HealthCheckRating => {
+  console.log(healthCheckRating);
+  if (
+    !isValidHealthCheckRating(healthCheckRating) ||
+    !isHealthCheckRating(healthCheckRating)
+  ) {
+    throw new Error('Incorrrect or missing health check rating');
+  }
+  return healthCheckRating;
+};
+const isHealthCheckRating = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  healthCheckRating: any
+): healthCheckRating is HealthCheckRating => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(HealthCheckRating).includes(healthCheckRating);
+};
+
+const isValidHealthCheckRating = (
+  healthCheckRating: any
+): healthCheckRating is Gender => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(HealthCheckRating).includes(healthCheckRating);
+};
+
+const parseEmployerName = (employerName: unknown): string => {
+  if (!employerName || !isString(employerName)) {
+    throw new Error('Incorrect or missing employer name');
+  }
+  return employerName;
+};
+
+const parseType = (
+  type: unknown
+): 'OccupationalHealthcare' | 'Hospital' | 'HealthCheck' => {
+  if (!type || !isString(type) || !isValidType(type)) {
+    throw new Error('Invalid or missing type');
+  }
+  if (type === 'Hospital') {
+    return 'Hospital';
+  } else if (type === 'HealthCheck') {
+    return 'HealthCheck';
+  } else {
+    return 'OccupationalHealthcare';
+  }
+};
+
+const isValidType = (type: string): boolean => {
+  return (
+    type === 'Hospital' ||
+    type === 'HealthCheck' ||
+    type === 'OccupationalHealthcare'
+  );
+};
+
+const parseDischarge = (discharge: unknown): Discharge => {
+  if (!discharge || !isDischarge(discharge)) {
+    throw new Error('Incorrect or missing discharge');
+  }
+  return discharge;
+};
+
+const isDischarge = (discharge: unknown): discharge is Discharge => {
+  return (
+    (discharge as Discharge).criteria !== undefined &&
+    (discharge as Discharge).date !== undefined
+  );
+};
+const parseSickLeave = (sickLeave: unknown): SickLeave => {
+  if (!sickLeave && !isSickLeave(sickLeave)) {
+    throw new Error('Incorrect or missing sickLeave');
+  }
+  return sickLeave as SickLeave;
+};
+
+const isSickLeave = (sickLeave: unknown): sickLeave is SickLeave => {
+  return (
+    (sickLeave as SickLeave).startDate !== undefined &&
+    (sickLeave as SickLeave).endDate !== undefined
+  );
+};
+
+const parseDiagnoses = (diagnoses: unknown): Array<Diagnose['code']> => {
+  if (!Array.isArray(diagnoses)) {
+    throw new Error('Invalid diagnoses');
+  }
+  return diagnoses.map((diagnose) => diagnose as Diagnose['code']);
+};
+
+const parseSpecialist = (specialist: unknown): string => {
+  if (!specialist || !isString(specialist)) {
+    throw new Error('Incorrect or missing specialist');
+  }
+  return specialist;
+};
+
+const parseDescription = (description: unknown): string => {
+  if (!description || !isString(description)) {
+    throw new Error('Incorrect or missing description');
+  }
+  return description;
 };
 
 //To validate name field, we need to check that it exists,
@@ -37,12 +220,12 @@ const isString = (text: unknown): text is string => {
 };
 
 //Validate that dateOfBirth field is not empty, is a string and is a string with a valid date
-const parseDateOfBirth = (dateOfBirth: unknown): string => {
-  if (!dateOfBirth || !isString(dateOfBirth) || !isDate(dateOfBirth)) {
+const parseDate = (date: unknown): string => {
+  if (!date || !isString(date) || !isDate(date)) {
     throw new Error('Incorrect or missing date of birth');
   }
 
-  return dateOfBirth;
+  return date;
 };
 
 //Type guard for date, because we are already checking in parseDateOfBirth that needs to be a string
@@ -87,5 +270,3 @@ const parseEntries = (entries: unknown): Entry[] => {
   }
   return entries.map((entry) => entry as Entry);
 };
-
-export default toNewPatient;
