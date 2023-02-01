@@ -19,7 +19,7 @@ const HealthCheckEntry = (props: HealthEntryType) => {
       <Typography>{props.description}</Typography>
       <Typography>{props.specialist}</Typography>
       <Typography>{props.date}</Typography>
-      <Typography>{props.healthCheckRating}</Typography>{' '}
+      <Typography>{props.healthCheckRating === 0}</Typography>
       <ul>
         {props.diagnoses.map((diagn) => (
           <li key={diagn.code}>

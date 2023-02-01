@@ -1,19 +1,25 @@
-import React, { useState } from "react";
-import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
+import React, { useState } from 'react';
+import { ErrorMessage, Field, FieldProps, FormikProps } from 'formik';
 import {
   Select,
   FormControl,
   MenuItem,
   TextField as TextFieldMUI,
   Typography,
-} from "@material-ui/core";
-import { Diagnosis, Gender } from "../types";
-import { InputLabel } from "@material-ui/core";
+} from '@material-ui/core';
+import { Diagnosis, Gender } from '../types';
+import { InputLabel } from '@material-ui/core';
 import Input from '@material-ui/core/Input';
 
 // structure of a single option
 export type GenderOption = {
   value: Gender;
+  label: string;
+};
+
+//struncture of a single option for entry type
+export type TypeOption = {
+  value: 'Hospital' | 'HealthCheck' | 'OccupationalHealthcare';
   label: string;
 };
 
@@ -24,14 +30,61 @@ type SelectFieldProps = {
   options: GenderOption[];
 };
 
-const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;
+//props to entry type component
+type SelectFieldTypeProps = {
+  name: string;
+  label: string;
+  options: TypeOption[];
+};
+
+const FormikSelect = ({ field, ...props }: FieldProps) => (
+  <Select {...field} {...props} />
+);
 
 export const SelectField = ({ name, label, options }: SelectFieldProps) => (
   <>
     <InputLabel>{label}</InputLabel>
     <Field
       fullWidth
-      style={{ marginBottom: "0.5em" }}
+      style={{ marginBottom: '0.5em' }}
+      label={label}
+      component={FormikSelect}
+      name={name}
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label || option.value}
+        </MenuItem>
+      ))}
+    </Field>
+  </>
+);
+
+export const DischargeField = ({ name, label }: DischargeFieldProps) => (
+  <>
+    <InputLabel>{label}</InputLabel>
+    <div>
+      <label htmlFor={`${name}.date`}>{`${label} date`}</label>
+      <Field type='date' id={`${name}.date`} name={`${name}.date`} />
+      <ErrorMessage name={`${name}.date`} />
+
+      <label htmlFor={`${name}.criteria`}>{`${label} criteria`}</label>
+      <Field type='text' id={`${name}.criteria`} name={`${name}.criteria`} />
+      <ErrorMessage name={`${name}.criteria`} />
+    </div>
+  </>
+);
+
+export const SelectFieldType = ({
+  name,
+  label,
+  options,
+}: SelectFieldTypeProps) => (
+  <>
+    <InputLabel>{label}</InputLabel>
+    <Field
+      fullWidth
+      style={{ marginBottom: '0.5em' }}
       label={label}
       component={FormikSelect}
       name={name}
@@ -50,15 +103,20 @@ interface TextProps extends FieldProps {
   placeholder: string;
 }
 
+interface DischargeFieldProps {
+  name: string;
+  label: string;
+}
+
 export const TextField = ({ field, label, placeholder }: TextProps) => (
-  <div style={{ marginBottom: "1em" }}>
+  <div style={{ marginBottom: '1em' }}>
     <TextFieldMUI
       fullWidth
       label={label}
       placeholder={placeholder}
       {...field}
     />
-    <Typography variant="subtitle2" style={{ color: "red" }}>
+    <Typography variant='subtitle2' style={{ color: 'red' }}>
       <ErrorMessage name={field.name} />
     </Typography>
   </div>
@@ -77,12 +135,12 @@ export const NumberField = ({ field, label, min, max }: NumberProps) => {
   const [value, setValue] = useState<number>();
 
   return (
-    <div style={{ marginBottom: "1em" }}>
+    <div style={{ marginBottom: '1em' }}>
       <TextFieldMUI
         fullWidth
         label={label}
         placeholder={String(min)}
-        type="number"
+        type='number'
         {...field}
         value={value}
         onChange={(e) => {
@@ -91,9 +149,9 @@ export const NumberField = ({ field, label, min, max }: NumberProps) => {
           if (value > max) setValue(max);
           else if (value <= min) setValue(min);
           else setValue(Math.floor(value));
-      }}
+        }}
       />
-      <Typography variant="subtitle2" style={{ color: "red" }}>
+      <Typography variant='subtitle2' style={{ color: 'red' }}>
         <ErrorMessage name={field.name} />
       </Typography>
     </div>
@@ -106,12 +164,12 @@ export const DiagnosisSelection = ({
   setFieldTouched,
 }: {
   diagnoses: Diagnosis[];
-  setFieldValue: FormikProps<{ diagnosisCodes: string[] }>["setFieldValue"];
-  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>["setFieldTouched"];
+  setFieldValue: FormikProps<{ diagnosisCodes: string[] }>['setFieldValue'];
+  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>['setFieldTouched'];
 }) => {
   const [selectedDiagnoses, setDiagnoses] = useState<string[]>([]);
-  const field = "diagnosisCodes";
-  const onChange = (data: string[]) => {    
+  const field = 'diagnosisCodes';
+  const onChange = (data: string[]) => {
     setDiagnoses([...data]);
     setFieldTouched(field, true);
     setFieldValue(field, selectedDiagnoses);
@@ -126,7 +184,12 @@ export const DiagnosisSelection = ({
   return (
     <FormControl style={{ width: 552, marginBottom: '30px' }}>
       <InputLabel>Diagnoses</InputLabel>
-      <Select multiple value={selectedDiagnoses} onChange={(e) => onChange(e.target.value as string[])} input={<Input />}>
+      <Select
+        multiple
+        value={selectedDiagnoses}
+        onChange={(e) => onChange(e.target.value as string[])}
+        input={<Input />}
+      >
         {stateOptions.map((option) => (
           <MenuItem key={option.key} value={option.value}>
             {option.text}

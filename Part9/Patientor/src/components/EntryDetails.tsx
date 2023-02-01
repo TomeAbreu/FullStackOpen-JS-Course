@@ -6,7 +6,7 @@ import OccupationalHealthcareEntry from './OccupationalHealthcareEntry';
 
 interface EntryDetails {
   entry: Entry;
-  diagnoses: Array<Diagnosis>;
+  diagnoses?: Array<Diagnosis>;
 }
 
 /**
@@ -19,6 +19,7 @@ const assertNever = (value: never): never => {
 };
 
 const EntryDetails = (props: EntryDetails) => {
+  console.log('ENTRY DETAILS: ', props.entry);
   switch (props.entry.type) {
     case 'Hospital':
       return (
@@ -28,8 +29,7 @@ const EntryDetails = (props: EntryDetails) => {
           description={props.entry.description}
           date={props.entry.date}
           specialist={props.entry.specialist}
-          diagnoses={props.diagnoses}
-          employerName={props.entry.employerName}
+          diagnoses={props.diagnoses ? props.diagnoses : []}
           discharge={props.entry.discharge}
           sickLeave={props.entry.sickLeave}
         ></HospitalEntry>
@@ -43,7 +43,7 @@ const EntryDetails = (props: EntryDetails) => {
           description={props.entry.description}
           date={props.entry.date}
           specialist={props.entry.specialist}
-          diagnoses={props.diagnoses}
+          diagnoses={props.diagnoses ? props.diagnoses : []}
           healthCheckRating={props.entry.healthCheckRating}
         ></HealthCheckEntry>
       );
@@ -56,7 +56,7 @@ const EntryDetails = (props: EntryDetails) => {
           description={props.entry.description}
           date={props.entry.date}
           specialist={props.entry.specialist}
-          diagnoses={props.diagnoses}
+          diagnoses={props.diagnoses ? props.diagnoses : []}
           employerName={props.entry.employerName}
         ></OccupationalHealthcareEntry>
       );

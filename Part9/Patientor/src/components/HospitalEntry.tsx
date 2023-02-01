@@ -5,13 +5,12 @@ import HospitalIcon from '@material-ui/icons/LocalHospital';
 
 interface HEntryType {
   id: string;
-  diagnoses: Array<Diagnosis>;
+  diagnoses?: Array<Diagnosis>;
   description: string;
   date: string;
   specialist: string;
-  employerName: string;
   discharge: Discharge;
-  sickLeave: SickLeave;
+  sickLeave?: SickLeave;
 }
 
 const HospitalEntry = (props: HEntryType) => {
@@ -21,19 +20,23 @@ const HospitalEntry = (props: HEntryType) => {
       <Typography>{props.description}</Typography>
       <Typography>{props.specialist}</Typography>
       <Typography>{props.date}</Typography>
-      <Typography>{props.employerName}</Typography>
       <Typography>
         {props.discharge.date} {props.discharge.criteria}
       </Typography>
-      <Typography>
-        {props.sickLeave.startDate} {props.sickLeave.endDate}
-      </Typography>
+      {props.sickLeave ? (
+        <Typography>
+          {props.sickLeave.startDate} {props.sickLeave.endDate}
+        </Typography>
+      ) : null}
+
       <ul>
-        {props.diagnoses.map((diagn) => (
-          <li key={diagn.code}>
-            {diagn.code} {diagn.name}
-          </li>
-        ))}
+        {props.diagnoses
+          ? props.diagnoses.map((diagn) => (
+              <li key={diagn.code}>
+                {diagn.code} {diagn.name}
+              </li>
+            ))
+          : null}
       </ul>
     </div>
   );
